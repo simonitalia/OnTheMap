@@ -70,85 +70,76 @@ class OTMNetworkController {
     
     
     //MARK:- Session Management Methods
-    class func createUserSession(using credentials: UserCredentials, completion: @escaping (SessionResponse?, Error?) -> Void) {
+    class func createUserSession(using credentials: UserCredentials, completion: @escaping (Result <SessionResponse, OTMError>) -> Void) {
         
         var request = URLRequest(url: URL(string: Endpoint.session)!)
+        print("Request URL: \(request).")//for debugging
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        //create POSTSession object
         let bodyData = PostSession(credentials: credentials)
 
-        //POST Request
+        //Perform POST Request
         do {
             request.httpBody = try JSONEncoder().encode(bodyData)
 
-        //handle object JSOSN encoding error
+        //handle object JSON encoding error
         } catch {
             print("Error! Encoding POSTSession object failed,")
         }
         
         let session = URLSession.shared
         let task = session.dataTask(with: request) { (data, response, error) in
+            
+            //handle random network error
+            if let error = error {
+                completion(.failure(.unableToComplete))
+                print("Error! Could not create user session. Reason: \(error.localizedDescription)")
+            }
            
-            //capture server response details for debugging
-            if let httpResponse = response as? HTTPURLResponse {
+            //handle failed http response
+//            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            if let httpResponse = response as? HTTPURLResponse  {
                 
+                //catch error response code
                 switch httpResponse.statusCode {
-                case 200, 201:
-                    print("OK! Remote server reponded with OK status: \(httpResponse.statusCode)")
                 
-                case 403, 404, 418:
-                    completion(nil, error)
-                    print("Client Error! Remote server reponded with error status: \(httpResponse.statusCode)")
-                    
+                //client side error
+                case 400, 403:
+                    completion(.failure(.invalidCredentials))
+                    return
+                
+                //server side error
                 case 500:
-                    completion(nil, error)
-                    print("Server Error! Remote server reponded with error status: \(httpResponse.statusCode)")
+                    completion(.failure(.invalidResposne))
+                    return
                     
                 default:
-                    completion(nil, error)
-                    print("Error! Remote server reponded with error status: \(httpResponse.statusCode)")
-                    return
+                    break
                 }
             }
             
-            //POST Request Data Response
+            //process data Response
+            //handle no data returned
             guard let data = data else {
-                DispatchQueue.main.async {
-                    print("Error! Did not get back valid JSON data from server.")
-                    completion(nil, error)
-                }
+                completion(.failure(.invalidData))
                 return
             }
               
-            //decode JSON Response object
+            //decode JSON Data Response object
             let decoder = JSONDecoder()
-            let range = 5..<data.count
-            let newData = data.subdata(in: range)
             
             do {
+                let range = 5..<data.count
+                let newData = data.subdata(in: range)
                 let sessionObject = try decoder.decode(SessionResponse.self, from: newData)
+                completion(.success(sessionObject))
+                print("Success! UserSession created.")
                 
-                DispatchQueue.main.async {
-                    print("Success! UserSession created.")
-                    completion(sessionObject, nil)
-                }
-                
-            //handle server response decoode erroor
+            //handle bad data returned
             } catch {
-                
-                do {
-                    let errorResponse = try decoder.decode(OTMResponse.self, from: data) as Error
-                    DispatchQueue.main.async {
-                        print("Error! Could not create UserSession. Reason: \(errorResponse).")
-                        completion(nil, errorResponse)
-                    }
-                    
-                } catch {
-                    DispatchQueue.main.async {
-                        print("Error! Could not create UserSession. Failed to decode Error Response. Reason: \(error).")
-                        completion(nil, error)
-                    }
-                }
+                completion(.failure(.invalidData))
             }
         }
         

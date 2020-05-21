@@ -27,43 +27,49 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
     }
     
     
     func fireCreateUserSession() {
         
+        //ensure both emial or password fields have data
+        guard loginFormTextFields[0].text != "" && loginFormTextFields[1].text != "" else {
+            self.presentUserAlert(title: "Login Form Incomplete!", message: OTMError.incompleteLoginForm.rawValue)
+            return
+        }
+        
+        //set username / password from text fields
         var username = String()
         var password = String()
         
         for textField in loginFormTextFields {
             
-            switch textField.tag {
-            case 0:
+            if textField.tag == 0 {
                 if let text = textField.text {
                     username = text
                 }
-            
-            case 1:
+            }
+             if textField.tag == 1 {
                 if let text = textField.text {
                     password = text
                 }
-                
-            default:
-                break
             }
         }
         
         let credentials = UserCredentials(username: username, password: password)
-        
-        OTMNetworkController.createUserSession(using: credentials) { (completion, error) in
-            if let _ = completion {
-                // segue to next screen
-            }
+        OTMNetworkController.createUserSession(using: credentials) { [weak self] (result) in
+            guard let self = self else { return }
             
-            if let _ = error {
-                //present error alert to user
-                self.presentUserAlert(title: "Uh Oh!", message: "We had trouble logging you in.\nPlease check your username and pasword is correct and try again.")
+            switch result {
+                
+            //if login success, segue to next vc / screen
+            case.success:
+                print("Session created")
+                //perform segue
+                
+            //if login error, present error alert with specific error reason to user
+            case .failure(let error):
+                self.presentUserAlert(title: "Uh Oh!", message: error.rawValue)
             }
         }
     }

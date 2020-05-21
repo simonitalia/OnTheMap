@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 struct OTMResponse: Codable {
     let statusCode: Int
     let statusMessage: String
@@ -19,8 +18,4 @@ struct OTMResponse: Codable {
     }
 }
 
-extension OTMResponse: LocalizedError {
-    var errorDescription: String? {
-        return statusMessage
-    }
-}
+

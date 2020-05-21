@@ -8,19 +8,19 @@
 
 import Foundation
 
-struct SessionResponse: Codable {
+struct SessionResponse: Codable, Hashable {
     let account: Account
     let session: Session
 }
 
 
-struct Account: Codable {
+struct Account: Codable, Hashable {
     let registered: Bool
     let key: String
 }
 
 
-struct Session: Codable {
+struct Session: Codable, Hashable {
     let id: String
     let expiration: String
 }
