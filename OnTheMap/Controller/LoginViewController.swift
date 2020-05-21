@@ -14,6 +14,8 @@ class LoginViewController: UIViewController {
     var isKeyboardVisible = false
     
     //storyboard outlets
+    @IBOutlet var loginStackViews: [UIStackView]!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet var loginFormTextFields: [UITextField]!
     
     
@@ -55,6 +57,18 @@ class LoginViewController: UIViewController {
     }
     
     
+    func loggingUserIn(flag: Bool) {
+        if flag {
+            activityIndicator.startAnimating()
+            loginStackViews.forEach { $0.isUserInteractionEnabled = false }
+            
+        } else {
+            activityIndicator.stopAnimating()
+            loginStackViews.forEach { $0.isUserInteractionEnabled = true }
+        }
+    }
+    
+    
     func fireCreateUserSession() {
         
         //ensure both emial or password fields have data
@@ -62,6 +76,9 @@ class LoginViewController: UIViewController {
             self.presentUserAlert(title: "Login Form Incomplete!", message: OTMError.incompleteLoginForm.rawValue)
             return
         }
+        
+        //start activity indicator animtion
+        self.loggingUserIn(flag: true)
         
         //set username / password from text fields
         var username = String()
@@ -83,9 +100,12 @@ class LoginViewController: UIViewController {
         
         let credentials = UserCredentials(username: username, password: password)
         OTMNetworkController.createUserSession(using: credentials) { [weak self] (result) in
+            
             guard let self = self else { return }
             
             DispatchQueue.main.async {
+                self.loggingUserIn(flag: false)
+
                 switch result {
                     
                 //if login success, segue to next vc / screen

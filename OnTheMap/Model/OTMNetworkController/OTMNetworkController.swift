@@ -22,11 +22,6 @@ class OTMNetworkController {
         static let session = base+"session"
         static let resultsLimit = 50
         
-        
-        //session
-        
-        
-        
         //student location
         case limitResults(to: Int)
         case skip(items: Int)
@@ -40,7 +35,7 @@ class OTMNetworkController {
         
         
         //computed stringURL
-       var stringURL: String {
+        var stringURL: String {
             var components = URLComponents()
 
             switch self {
@@ -73,7 +68,6 @@ class OTMNetworkController {
     class func createUserSession(using credentials: UserCredentials, completion: @escaping (Result <SessionResponse, OTMError>) -> Void) {
         
         var request = URLRequest(url: URL(string: Endpoint.session)!)
-        print("Request URL: \(request).")//for debugging
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
@@ -99,7 +93,6 @@ class OTMNetworkController {
             }
            
             //handle failed http response
-//            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
             if let httpResponse = response as? HTTPURLResponse  {
                 
                 //catch error response code

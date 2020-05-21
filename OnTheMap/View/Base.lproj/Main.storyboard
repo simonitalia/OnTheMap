@@ -73,10 +73,15 @@
                                     </label>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="wYd-9u-HiL">
+                                <rect key="frame" x="188.5" y="434.5" width="37" height="37"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="wYd-9u-HiL" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="1CG-BL-lcI"/>
                             <constraint firstItem="SPi-Ja-oJD" firstAttribute="top" secondItem="PRr-eD-zi1" secondAttribute="bottom" constant="50" id="7Vl-rq-NmY"/>
+                            <constraint firstItem="wYd-9u-HiL" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="B6M-vu-XcV"/>
                             <constraint firstItem="PRr-eD-zi1" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="IxX-yi-4DR"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="SPi-Ja-oJD" secondAttribute="trailing" constant="20" id="XMJ-E7-eWp"/>
                             <constraint firstItem="SPi-Ja-oJD" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="XhB-Ld-QGc"/>
@@ -87,8 +92,10 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="wYd-9u-HiL" id="wAc-pD-YIq"/>
                         <outletCollection property="loginFormTextFields" destination="FPS-Uo-rVh" collectionClass="NSMutableArray" id="Noa-Yo-xKE"/>
                         <outletCollection property="loginFormTextFields" destination="Mw4-fW-vS2" collectionClass="NSMutableArray" id="i6T-JO-dxM"/>
+                        <outletCollection property="loginStackViews" destination="SPi-Ja-oJD" collectionClass="NSMutableArray" id="Jg4-nx-VUl"/>
                         <segue destination="JFy-Iv-6uT" kind="showDetail" identifier="LoginVCToTabBarController" id="RsT-tP-HxG"/>
                     </connections>
                 </viewController>
