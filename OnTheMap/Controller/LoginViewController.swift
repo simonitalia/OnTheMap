@@ -60,16 +60,17 @@ class LoginViewController: UIViewController {
         OTMNetworkController.createUserSession(using: credentials) { [weak self] (result) in
             guard let self = self else { return }
             
-            switch result {
-                
-            //if login success, segue to next vc / screen
-            case.success:
-                print("Session created")
-                //perform segue
-                
-            //if login error, present error alert with specific error reason to user
-            case .failure(let error):
-                self.presentUserAlert(title: "Uh Oh!", message: error.rawValue)
+            DispatchQueue.main.async {
+                switch result {
+                    
+                //if login success, segue to next vc / screen
+                case.success:
+                    self.performSegue(withIdentifier: "LoginVCToTabBarController", sender: nil)
+                    
+                //if login error, present error alert with specific error reason to user
+                case .failure(let error):
+                    self.presentUserAlert(title: "Uh Oh!", message: error.rawValue)
+                }
             }
         }
     }
