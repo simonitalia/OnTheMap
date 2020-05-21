@@ -75,16 +75,15 @@ class OTMNetworkController {
         var request = URLRequest(url: URL(string: Endpoint.session)!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        //POST Request
-        let data = PostSession(credentials: credentials)
+        let bodyData = PostSession(credentials: credentials)
 
+        //POST Request
         do {
-            request.httpBody = try JSONEncoder().encode(data)
+            request.httpBody = try JSONEncoder().encode(bodyData)
 
         //handle object JSOSN encoding error
         } catch {
-            print("Error! Encoding user session object failed,")
+            print("Error! Encoding POSTSession object failed,")
         }
         
         let session = URLSession.shared
@@ -92,18 +91,35 @@ class OTMNetworkController {
            
             //capture server response details for debugging
             if let httpResponse = response as? HTTPURLResponse {
-                print("Remote server reponded with status code: \(httpResponse.statusCode)")
+                
+                switch httpResponse.statusCode {
+                case 200, 201:
+                    print("OK! Remote server reponded with OK status: \(httpResponse.statusCode)")
+                
+                case 403, 404, 418:
+                    completion(nil, error)
+                    print("Client Error! Remote server reponded with error status: \(httpResponse.statusCode)")
+                    
+                case 500:
+                    completion(nil, error)
+                    print("Server Error! Remote server reponded with error status: \(httpResponse.statusCode)")
+                    
+                default:
+                    completion(nil, error)
+                    print("Error! Remote server reponded with error status: \(httpResponse.statusCode)")
+                    return
+                }
             }
             
+            //POST Request Data Response
             guard let data = data else {
                 DispatchQueue.main.async {
-                    print("Error! Remote server did not pass back any JSON data.")
+                    print("Error! Did not get back valid JSON data from server.")
                     completion(nil, error)
                 }
                 return
             }
               
-            //POST Request Response
             //decode JSON Response object
             let decoder = JSONDecoder()
             let range = 5..<data.count
