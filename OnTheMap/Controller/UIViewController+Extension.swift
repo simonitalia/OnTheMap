@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 
 extension UIViewController {
      
@@ -17,4 +18,11 @@ extension UIViewController {
             self.present(ac, animated: true)
         }
     }
+    
+    
+    func presentSafariViewController(with url: URL) {
+        let safariVC = SFSafariViewController(url: url)
+        present(safariVC, animated: true)
+    }
+    
 }

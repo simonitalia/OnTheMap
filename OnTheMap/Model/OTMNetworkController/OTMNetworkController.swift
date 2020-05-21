@@ -9,14 +9,15 @@
 import Foundation
 
 
-enum Auth {
-    case username(email: String)
-    case password(String)
-}
+//enum Auth {
+//    case username(email: String)
+//    case password(String)
+//}
 
 class OTMNetworkController {
     
-    private enum Endpoint {
+    enum Endpoint {
+        static let udacityWebSignin = "https://auth.udacity.com/sign-in"
         static let base = "https://onthemap-api.udacity.com/v1/"
         static let studentLocation = base+"StudentLocation"
         static let session = base+"session"

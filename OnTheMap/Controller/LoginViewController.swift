@@ -24,8 +24,10 @@ class LoginViewController: UIViewController {
         fireCreateUserSession()
     }
     
+    
     @IBAction func signUpLabelTapped(_ sender: Any) {
-        print("Sign up label tapped")
+        guard let url = URL(string: OTMNetworkController.Endpoint.udacityWebSignin) else { return }
+        presentSafariViewController(with: url)
     }
     
     
