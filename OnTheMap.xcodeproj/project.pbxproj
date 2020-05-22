@@ -100,7 +100,6 @@
 		2A74D6F124753AD200062429 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				2A74D6E62475394700062429 /* StudentInformation.swift */,
 				2A2294F3247765EE0081F50C /* StudentLocations.swift */,
 			);
 			path = Data;
@@ -110,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				2A74D6EE24753A4600062429 /* SessionResponse.swift */,
+				2A74D6E62475394700062429 /* StudentInformation.swift */,
 				2A9B2AF3247653F1003905EF /* OTMResponse.swift */,
 				2A9B2AF124762C94003905EF /* OTMError.swift */,
 			);

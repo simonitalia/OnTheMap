@@ -30,7 +30,6 @@ class StudentLocationsTableViewController: UITableViewController {
     }
 
 
-
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -47,7 +46,7 @@ class StudentLocationsTableViewController: UITableViewController {
 
         //configure cell
         let row = indexPath.row
-        let name = studentLocations[row].firstName + " " + studentLocations[row].lastName
+        let name = createFullName(with: studentLocations[row].firstName, and: studentLocations[row].lastName)
         cell.textLabel?.text = name
         cell.detailTextLabel?.text = studentLocations[row].mediaURL
         return cell
@@ -70,5 +69,4 @@ class StudentLocationsTableViewController: UITableViewController {
             }
         }
     }
-    
 }

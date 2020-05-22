@@ -25,4 +25,8 @@ extension UIViewController {
         present(safariVC, animated: true)
     }
     
+    
+    func createFullName(with firstName: String, and lastName: String) -> String {
+        return "\(firstName) \(lastName)"
+    }
 }
