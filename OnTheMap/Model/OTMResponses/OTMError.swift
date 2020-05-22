@@ -15,8 +15,8 @@ enum OTMError: String, Error {
     case incompleteLoginForm = "Please ensure both email and password fields are completed."
     
     
-    //Student media URLS
-    case badURL = "Cannot open mediaURL.\nURL does not contain required https scheme."
+    //Bad Student mediaURL schemes
+    case badURL = "Cannot open mediaURL.\nURL is not prefixed with a valid scheme (eg: https)."
     
 
     //Global errors

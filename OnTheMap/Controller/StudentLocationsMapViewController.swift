@@ -94,4 +94,23 @@ extension StudentLocationsMapViewController: MKMapViewDelegate {
         
         return pinView
     }
+    
+    
+    //open mediaURL when pinView annotaion is tapped
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        
+        if control == view.rightCalloutAccessoryView {
+            if let url = URL(string: (view.annotation?.subtitle!)!) {
+                
+                //open mediaURL
+                if url.scheme == "https" || url.scheme == "http" {
+                    self.presentSafariViewController(with: url)
+                 
+                //guard against badly formatted medialURL
+                } else {
+                    self.presentUserAlert(title: "Bad URL Scheme!", message: OTMError.badURL.rawValue)
+                }
+            }
+        }
+    }
 }

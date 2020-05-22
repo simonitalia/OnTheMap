@@ -60,7 +60,7 @@ class StudentLocationsTableViewController: UITableViewController {
         if let url = URL(string: studentInformation.mediaURL) {
             
             //open mediaURL
-            if url.scheme == "https"  {
+            if url.scheme == "https" || url.scheme == "http" {
                 self.presentSafariViewController(with: url)
              
             //guard against badly formatted medialURL
