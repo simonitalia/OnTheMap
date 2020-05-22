@@ -11,7 +11,8 @@ import UIKit
 class LoginViewController: UIViewController {
     
     //properties
-    var isKeyboardVisible = false
+    private let udacityWebSignin = "https://auth.udacity.com/sign-in"
+    private var isKeyboardVisible = false
     
     //storyboard outlets
     @IBOutlet var loginStackViews: [UIStackView]!
@@ -26,7 +27,7 @@ class LoginViewController: UIViewController {
     
     
     @IBAction func signUpLabelTapped(_ sender: Any) {
-        guard let url = URL(string: OTMNetworkController.Endpoint.udacityWebSignin) else { return }
+        guard let url = URL(string: udacityWebSignin) else { return }
         presentSafariViewController(with: url)
     }
     
@@ -52,14 +53,14 @@ class LoginViewController: UIViewController {
     }
     
     
-    func configureUI() {
+    private func configureUI() {
         
         //set vc/self as delegate of text fields
         loginFormTextFields.forEach { $0.delegate = self }
     }
     
     
-    func loggingUserIn(flag: Bool) {
+    private func loggingUserIn(_ flag: Bool) {
         if flag {
             activityIndicator.startAnimating()
             loginStackViews.forEach { $0.isUserInteractionEnabled = false }
@@ -71,16 +72,21 @@ class LoginViewController: UIViewController {
     }
     
     
-    func fireCreateUserSession() {
+    private func fireCreateUserSession() {
         
-        //ensure both emial or password fields have data
+        //ensure both email and password fields have data
+        guard loginFormTextFields.count == 2 else {
+            print("Something went wrong! There should be 2 loginFormTextField objects.")
+            return
+        }
+        
         guard loginFormTextFields[0].text != "" && loginFormTextFields[1].text != "" else {
             self.presentUserAlert(title: "Login Form Incomplete!", message: OTMError.incompleteLoginForm.rawValue)
             return
         }
         
-        //start activity indicator animtion
-        self.loggingUserIn(flag: true)
+        //start activity indicator animation
+        self.loggingUserIn(true)
         
         //set username / password from text fields
         var username = String()
@@ -102,16 +108,18 @@ class LoginViewController: UIViewController {
         
         let credentials = UserCredentials(username: username, password: password)
         OTMNetworkController.createUserSession(using: credentials) { [weak self] (result) in
-            
             guard let self = self else { return }
             
             DispatchQueue.main.async {
-                self.loggingUserIn(flag: false)
+                
+                //stop activity indicator animation
+                self.loggingUserIn(false)
 
                 switch result {
                     
                 //if login success, segue to next vc / screen
                 case.success:
+                    print("Success! UserSession created.")
                     self.performSegue(withIdentifier: "LoginVCToTabBarController", sender: nil)
                     
                 //if login error, present error alert with specific error reason to user
@@ -128,7 +136,7 @@ class LoginViewController: UIViewController {
 extension LoginViewController: UINavigationControllerDelegate {
     
     //Keyboard notifications
-    func subscribeToKeyboardNotifications() {
+    private func subscribeToKeyboardNotifications() {
         
         //subscribe to KB specific notifications
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -137,13 +145,13 @@ extension LoginViewController: UINavigationControllerDelegate {
     }
     
     
-    func unsubscribeFromKeyboardNotifications() {
+    private func unsubscribeFromKeyboardNotifications() {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     
-    @objc func keyboardWillShow(_ notification: Notification) {
+    @objc private func keyboardWillShow(_ notification: Notification) {
         guard !isKeyboardVisible else { return } //ensure kb isn't already visible before moving view
         
         view.frame.origin.y = -getKeyboardHeight(notification) / 3
@@ -151,13 +159,13 @@ extension LoginViewController: UINavigationControllerDelegate {
     }
     
     
-    @objc func keyboardWillHide(_ notification: Notification) {
+    @objc private func keyboardWillHide(_ notification: Notification) {
         view.frame.origin.y = 0
         isKeyboardVisible = false
     }
     
     
-    func getKeyboardHeight(_ notification: Notification) -> CGFloat {
+    private func getKeyboardHeight(_ notification: Notification) -> CGFloat {
         let userInfo = notification.userInfo
         let kbSize = userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue //of CGRect
         return kbSize.cgRectValue.height

@@ -8,16 +8,19 @@
 
 import Foundation
 
-struct StudentLocation: Codable {
-    let objectId: String
-    let uniqueKey: String?
-    let createdAt: String
+struct StudentInformation: Codable {
     let firstName: String
     let lastName: String
-    let latitude: Float
     let longitude: Float
+    let latitude: Float
     let mapString: String
     let mediaURL: String
+    var uniqueKey: String?
+    let objectId: String
+    let createdAt: String
     let updatedAt: String
 }
+
+
+
 

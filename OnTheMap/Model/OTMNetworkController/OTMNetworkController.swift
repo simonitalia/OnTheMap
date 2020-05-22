@@ -9,58 +9,42 @@
 import Foundation
 
 
-//enum Auth {
-//    case username(email: String)
-//    case password(String)
-//}
-
 class OTMNetworkController {
     
-    enum Endpoint {
-        static let udacityWebSignin = "https://auth.udacity.com/sign-in"
+    private enum Endpoint {
         static let base = "https://onthemap-api.udacity.com/v1/"
-        static let studentLocation = base+"StudentLocation"
-        static let session = base+"session"
-        static let resultsLimit = 50
+        static let studentLocation = "StudentLocation?"
+        static let session = "session"
         
-        //student location
-        case limitResults(to: Int)
-        case skip(items: Int)
-        case uniqueKey(String)
+        //student location endpoints
+        case locationForStudent(key: String)
+        case studentLocations(limitedTo: Int, skipping: Int)
         
+        //user session endpoint
+        case userSession
         
         //computed URL
         var url: URL {
             return URL(string: stringURL)!
         }
         
-        
         //computed stringURL
         var stringURL: String {
-            var components = URLComponents()
 
             switch self {
-            case .limitResults:
-                let queryItem = URLQueryItem(name: "limit", value: "\(Endpoint.limitResults(to: Endpoint.resultsLimit))")
-                components.queryItems?.append(queryItem)
                 
-                return Endpoint.studentLocation + components.query!
+            //student location api urls
+            case .studentLocations(let limit, let skip):
+                return Endpoint.base + Endpoint.studentLocation + "limit=\(limit)&skip=\(skip)"
+            
+            case .locationForStudent(let key):
+                return Endpoint.base + Endpoint.studentLocation + "uniqueKey=\(key)"
                 
-                
-            case .skip(let items):
-                let limitQueryItem = URLQueryItem(name: "limit", value: "\(Endpoint.limitResults(to: Endpoint.resultsLimit))")
-                 components.queryItems?.append(limitQueryItem)
-                
-                 let skipQueryItem = URLQueryItem(name: "skip", value: "\(Endpoint.skip(items: items))")
-                 components.queryItems?.append(skipQueryItem)
-                
-                 return Endpoint.studentLocation + components.query!
-                
-            case .uniqueKey(let key):
-                let queryItem = URLQueryItem(name: "uniqueKey", value: "\(Endpoint.uniqueKey(key))")
-                components.queryItems?.append(queryItem)
-                return Endpoint.studentLocation + components.query!
+            //user session api urls
+            case .userSession:
+                return Endpoint.base + Endpoint.session
             }
+            
         }
     }
     
@@ -68,7 +52,7 @@ class OTMNetworkController {
     //MARK:- Session Management Methods
     class func createUserSession(using credentials: UserCredentials, completion: @escaping (Result <SessionResponse, OTMError>) -> Void) {
         
-        var request = URLRequest(url: URL(string: Endpoint.session)!)
+        var request = URLRequest(url: Endpoint.userSession.url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
@@ -81,7 +65,7 @@ class OTMNetworkController {
 
         //handle object JSON encoding error
         } catch {
-            print("Error! Encoding POSTSession object failed,")
+            print("POST Error! Encoding POSTSession object failed,")
         }
         
         let session = URLSession.shared
@@ -90,7 +74,7 @@ class OTMNetworkController {
             //handle random network error
             if let error = error {
                 completion(.failure(.unableToComplete))
-                print("Error! Could not create user session. Reason: \(error.localizedDescription)")
+                print("POST Error! Could not create user session. Reason: \(error.localizedDescription)")
             }
            
             //handle failed http response
@@ -106,7 +90,7 @@ class OTMNetworkController {
                 
                 //server side error
                 case 500:
-                    completion(.failure(.invalidResposne))
+                    completion(.failure(.invalidResponse))
                     return
                     
                 default:
@@ -129,7 +113,6 @@ class OTMNetworkController {
                 let newData = data.subdata(in: range)
                 let sessionObject = try decoder.decode(SessionResponse.self, from: newData)
                 completion(.success(sessionObject))
-                print("Success! UserSession created.")
                 
             //handle bad data returned
             } catch {
@@ -142,24 +125,47 @@ class OTMNetworkController {
     
     
     //MARK:- Student Location Methods
-    class func getStudentLocations() {
+    class func getStudentLocations(with limit: Int, skipItems: Int, completion: @escaping (Result <StudentLocations, OTMError>) -> Void) {
         
-        let url = URL(string: "")
-        let request = URLRequest(url: url!)
+        let request = URLRequest(url: Endpoint.studentLocations(limitedTo: limit, skipping: skipItems).url)
+        print("getStudentLocations Url: \(request)") //for debugging
         let session = URLSession.shared
         
-        let task = session.dataTask(with: request) { data, response, error in
-              if error != nil { // Handle error...
-                  return
-              }
-              print(String(data: data!, encoding: .utf8)!)
+        let task = session.dataTask(with: request) { (data, response, error) in
+            
+            //handle random network error
+            if let error = error {
+                completion(.failure(.unableToComplete))
+                print("GET Error! Could not fetch Student Locations. Reason: \(error.localizedDescription)")
+            }
+            
+            //bad http response
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200  else {
+                completion(.failure(.invalidResponse))
+                return
+            }
+            
+            //bad data returned, or alternate message like api rate limit exceeded
+            guard let data = data else {
+                completion(.failure(.invalidData))
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let locations = try decoder.decode(StudentLocations.self, from: data)
+                completion(.success(locations))
+                
+            } catch {
+                completion(.failure(.invalidData))
+            }
         }
         
         task.resume()
     }
 
     
-    class func postStudentLocation(object: StudentLocation) {
+    class func postStudentLocation(object: StudentInformation) {
         
         let url = URL(string: "")
         var request = URLRequest(url: url!)
@@ -178,19 +184,5 @@ class OTMNetworkController {
         
         task.resume()
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        
-        
-    
-    
-    
-    
+
 }
