@@ -13,6 +13,11 @@ enum OTMError: String, Error {
     //POST Session / User Login specific errors
     case invalidCredentials = "We had a problem logging you in.\nPleasse check your login details and try again." //403 client error
     case incompleteLoginForm = "Please ensure both email and password fields are completed."
+    
+    
+    //Student media URLS
+    case badURL = "Cannot open mediaURL.\nURL does not contain required https scheme."
+    
 
     //Global errors
     //network errors

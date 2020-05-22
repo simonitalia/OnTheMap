@@ -13,15 +13,23 @@ class StudentLocationsTableViewController: UITableViewController {
     //properties
     let resuseIdentifier = "StudentLocationCell"
     
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-
+    var studentLocations: [StudentInformation] {
+        return StudentLocationsMapViewController.studentLocations
     }
     
     
+    //MARK:- View LifeCycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.reloadData()
+    }
+
+
 
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -30,7 +38,7 @@ class StudentLocationsTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return studentLocations.count
     }
 
     
@@ -38,55 +46,29 @@ class StudentLocationsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "StudentLocationCell", for: indexPath)
 
         //configure cell
-        
-
+        let row = indexPath.row
+        let name = studentLocations[row].firstName + " " + studentLocations[row].lastName
+        cell.textLabel?.text = name
+        cell.detailTextLabel?.text = studentLocations[row].mediaURL
         return cell
     }
     
 
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let studentInformation = studentLocations[indexPath.row]
+        
+        //open mediaURL in safari on row tap
+        if let url = URL(string: studentInformation.mediaURL) {
+            
+            //open mediaURL
+            if url.scheme == "https"  {
+                self.presentSafariViewController(with: url)
+             
+            //guard against badly formatted medialURL
+            } else {
+                self.presentUserAlert(title: "Bad URL Scheme!", message: OTMError.badURL.rawValue)
+            }
+        }
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    
 }
