@@ -13,47 +13,71 @@ class OTMNetworkController {
     
     private enum Endpoint {
         
-        //endpoint url components
+        //url components
         enum URLComponent {
-            static let base = "https://onthemap-api.udacity.com/v1/"
-            static let studentLocation = "StudentLocation?"
-            static let session = "session"
-            static let limit = "limit="
-            static let skip = "&skip="
-            static let orderAscending = "&order=updatedAt"
-            static let orderDescending = "&order=-updatedAt"
-            static let uniqueKey = "uniqueKey="
+            static let scheme = "https"
+            static let host = "onthemap-api.udacity.com"
         }
         
+        //api endpoint paths
+        enum URLPath {
+            static let studentLocation = "/v1/StudentLocation"
+            static let session = "/v1/session"
+        }
         
-        //student location endpoints
+        //api endpoint query items
+        enum QueryItem {
+            static let limit = "limit"
+            static let skip = "skip"
+            static let order = "order"
+            static let uniqueKey = "uniqueKey"
+        }
+        
+        //user session endpoint paramters
+        case userSession
+        
+        //student location endpoint parameters
         case locationForStudent(key: String)
         case studentLocations(limitedTo: Int, skipping: Int)
         
-        //user session endpoint
-        case userSession
-        
-        //computed URL
-        var url: URL {
-            return URL(string: stringURL)!
-        }
-        
-        //computed stringURL
-        var stringURL: String {
-
+        //compute api enpoint URL
+        var url: URL? {
+            
             switch self {
                 
-            //student location api urls
+            //student location endpoint + query items
             case .studentLocations(let limit, let skip):
-                return Endpoint.URLComponent.base + Endpoint.URLComponent.studentLocation + Endpoint.URLComponent.limit + "\(limit)" + Endpoint.URLComponent.skip + "\(skip)" + Endpoint.URLComponent.orderDescending
-            
+                var components = self.getURLComponents(with: URLPath.studentLocation)
+                components.queryItems = [
+                    URLQueryItem(name: QueryItem.limit, value: "\(limit)"),
+                    URLQueryItem(name: QueryItem.skip, value: "\(skip)"),
+                    URLQueryItem(name: QueryItem.order, value: "-updatedAt")
+                ]
+                
+                return components.url
+  
+            //unique student endpoint + query items
             case .locationForStudent(let key):
-                return Endpoint.URLComponent.base + Endpoint.URLComponent.studentLocation + Endpoint.URLComponent.uniqueKey + key
+                var components = self.getURLComponents(with: URLPath.studentLocation)
+                components.queryItems = [
+                    URLQueryItem(name: QueryItem.uniqueKey, value: "\(key)")
+                ]
+                
+                return components.url
                 
             //user session api urls
             case .userSession:
-                return Endpoint.URLComponent.base + Endpoint.URLComponent.session
+                return self.getURLComponents(with: URLPath.session).url
             }
+        }
+        
+        //construct base URL from url components
+        func getURLComponents(with path: String) -> URLComponents {
+            var components = URLComponents()
+            components.scheme = URLComponent.scheme
+            components.host = URLComponent.host
+            components.path = path
+            return components
         }
     }
     
@@ -61,7 +85,10 @@ class OTMNetworkController {
     //MARK:- Session Management Methods
     class func createUserSession(using credentials: UserCredentials, completion: @escaping (Result <SessionResponse, OTMError>) -> Void) {
         
-        var request = URLRequest(url: Endpoint.userSession.url)
+        //safely check url enpoint can be constructed
+        guard let url = Endpoint.userSession.url else { return }
+        
+        var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
@@ -136,7 +163,10 @@ class OTMNetworkController {
     //MARK:- Student Location Methods
     class func getStudentLocations(with limit: Int, skipItems: Int, completion: @escaping (Result <StudentLocations, OTMError>) -> Void) {
         
-        let request = URLRequest(url: Endpoint.studentLocations(limitedTo: limit, skipping: skipItems).url)
+        //safely check url enpoint can be constructed
+        guard let url = Endpoint.studentLocations(limitedTo: limit, skipping: skipItems).url else { return }
+        
+        let request = URLRequest(url: url)
         print("getStudentLocations Url: \(request)") //for debugging
         let session = URLSession.shared
         
