@@ -184,5 +184,4 @@ class OTMNetworkController {
         
         task.resume()
     }
-
 }

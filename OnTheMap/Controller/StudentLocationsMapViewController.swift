@@ -11,15 +11,21 @@ import MapKit
 
 class StudentLocationsMapViewController: UIViewController {
     
-    //shared property for storing feteched student locations
-    static var studentLocations = [StudentInformation]()
-    private var itemsLimit = 100
+    //get reference to shared app delegate object
+    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    
+    
+    //set student locations data locally
+    private var studentLocations: [StudentInformation] {
+        return appDelegate.studentLocations
+    }
     
     
     //storyboard outlets
     @IBOutlet weak var mapView: MKMapView!
     
     
+    //MARK:- View LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
@@ -27,33 +33,42 @@ class StudentLocationsMapViewController: UIViewController {
     }
     
     
-    private func configureUI() {
-        fireGetStudentLocations()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
     }
     
     
-    private func fireGetStudentLocations() {
-        OTMNetworkController.getStudentLocations(with: itemsLimit, skipItems: StudentLocationsMapViewController.studentLocations.count) { (result) in
-
+    private func configureUI() {
+        performSelector(inBackground: #selector(fireGetStudentLocations), with: nil)
+    }
+    
+    
+    @objc private func fireGetStudentLocations() {
+        
+        OTMNetworkController.getStudentLocations(with: appDelegate.itemsLimit, skipItems: appDelegate.studentLocations.count) { (result) in
+            
             switch result {
             case .success(let studentLocations):
                 print("Success! StudentLocations fetched.")
-                StudentLocationsMapViewController.studentLocations.append(contentsOf: studentLocations.locations)
+                
+                //save studentloactins to shared object
+                self.appDelegate.studentLocations.append(contentsOf: studentLocations.locations)
                 
                 //create map annotations and set pins
                 self.createMapAnnotations()
                 
             case .failure(let error):
-                print("Error! Could not fetch student locations: Reason: \(error.rawValue)")
+                self.presentUserAlert(title: "Student Locations Download Error!", message: error.rawValue)
             }
         }
     }
     
     
     private func createMapAnnotations() {
-        guard !StudentLocationsMapViewController.studentLocations.isEmpty else { return }
+        guard !studentLocations.isEmpty else { return }
         
-        StudentLocationsMapViewController.studentLocations.forEach {
+        studentLocations.forEach {
             let annotation = MKPointAnnotation()
             
             //set title and subtitle text
@@ -69,8 +84,8 @@ class StudentLocationsMapViewController: UIViewController {
             mapView.addAnnotation(annotation)
         }
     }
-    
 }
+
 
 //MARK:- MKMAPView Delegate
 extension StudentLocationsMapViewController: MKMapViewDelegate {
@@ -98,9 +113,10 @@ extension StudentLocationsMapViewController: MKMapViewDelegate {
     
     //open mediaURL when pinView annotaion is tapped
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        guard let subtitle = view.annotation?.subtitle! else { return }
         
         if control == view.rightCalloutAccessoryView {
-            if let url = URL(string: (view.annotation?.subtitle!)!) {
+            if let url = URL(string: subtitle) {
                 
                 //open mediaURL
                 if url.scheme == "https" || url.scheme == "http" {

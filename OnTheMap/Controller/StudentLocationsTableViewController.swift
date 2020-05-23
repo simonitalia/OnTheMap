@@ -11,10 +11,12 @@ import UIKit
 class StudentLocationsTableViewController: UITableViewController {
     
     //properties
-    let resuseIdentifier = "StudentLocationCell"
+    private let resuseIdentifier = "StudentLocationCell"
     
-    var studentLocations: [StudentInformation] {
-        return StudentLocationsMapViewController.studentLocations
+    //set student locations data locally
+    private var studentLocations: [StudentInformation] {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        return appDelegate.studentLocations
     }
     
     

@@ -10,15 +10,12 @@ import Foundation
 
 enum OTMError: String, Error {
     
-    //POST Session / User Login specific errors
+    //POST Session errors
     case invalidCredentials = "We had a problem logging you in.\nPleasse check your login details and try again." //403 client error
+    
+    //LoginVC form specific errors
     case incompleteLoginForm = "Please ensure both email and password fields are completed."
     
-    
-    //Bad Student mediaURL schemes
-    case badURL = "Cannot open mediaURL.\nURL is not prefixed with a valid scheme (eg: https)."
-    
-
     //Global errors
     //network errors
     case unableToComplete = "Unable to complete request.\nPlease check internet connection."
@@ -27,5 +24,6 @@ enum OTMError: String, Error {
     //bad data errors
     case invalidData = "Data received from server was invalid.\nPlease try again."
     
-    
+    //Bad Student mediaURL schemes
+    case badURL = "Cannot open mediaURL.\nURL is not prefixed with a valid scheme (eg: https)."
 }
