@@ -12,9 +12,19 @@ import Foundation
 class OTMNetworkController {
     
     private enum Endpoint {
-        static let base = "https://onthemap-api.udacity.com/v1/"
-        static let studentLocation = "StudentLocation?"
-        static let session = "session"
+        
+        //endpoint url components
+        enum URLComponent {
+            static let base = "https://onthemap-api.udacity.com/v1/"
+            static let studentLocation = "StudentLocation?"
+            static let session = "session"
+            static let limit = "limit="
+            static let skip = "&skip="
+            static let orderAscending = "&order=updatedAt"
+            static let orderDescending = "&order=-updatedAt"
+            static let uniqueKey = "uniqueKey="
+        }
+        
         
         //student location endpoints
         case locationForStudent(key: String)
@@ -35,16 +45,15 @@ class OTMNetworkController {
                 
             //student location api urls
             case .studentLocations(let limit, let skip):
-                return Endpoint.base + Endpoint.studentLocation + "limit=\(limit)&skip=\(skip)"
+                return Endpoint.URLComponent.base + Endpoint.URLComponent.studentLocation + Endpoint.URLComponent.limit + "\(limit)" + Endpoint.URLComponent.skip + "\(skip)" + Endpoint.URLComponent.orderDescending
             
             case .locationForStudent(let key):
-                return Endpoint.base + Endpoint.studentLocation + "uniqueKey=\(key)"
+                return Endpoint.URLComponent.base + Endpoint.URLComponent.studentLocation + Endpoint.URLComponent.uniqueKey + key
                 
             //user session api urls
             case .userSession:
-                return Endpoint.base + Endpoint.session
+                return Endpoint.URLComponent.base + Endpoint.URLComponent.session
             }
-            
         }
     }
     

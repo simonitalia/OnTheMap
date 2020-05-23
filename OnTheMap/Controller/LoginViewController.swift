@@ -11,8 +11,10 @@ import UIKit
 class LoginViewController: UIViewController {
     
     //properties
+    private let segueToTabBarController = "LoginVCToTabBarController"
     private let udacityWebSignin = "https://auth.udacity.com/sign-in"
     private var isKeyboardVisible = false
+    
     
     //storyboard outlets
     @IBOutlet var loginStackViews: [UIStackView]!
@@ -120,7 +122,7 @@ class LoginViewController: UIViewController {
                 //if login success, segue to next vc / screen
                 case.success:
                     print("Success! UserSession created.")
-                    self.performSegue(withIdentifier: "LoginVCToTabBarController", sender: nil)
+                    self.performSegue(withIdentifier: self.segueToTabBarController, sender: nil)
                     
                 //if login error, present error alert with specific error reason to user
                 case .failure(let error):
