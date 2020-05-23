@@ -59,6 +59,16 @@ class LoginViewController: UIViewController {
         
         //set vc/self as delegate of text fields
         loginFormTextFields.forEach { $0.delegate = self }
+        
+        #if targetEnvironment(simulator)
+        for textField in loginFormTextFields {
+            if textField.tag == 0 {
+                textField.text = "simonitalia@gmail.com"
+            } else {
+                textField.text = "lio4!kBX20o#Xh49"
+            }
+        }
+        #endif
     }
     
     
@@ -83,7 +93,7 @@ class LoginViewController: UIViewController {
         }
         
         guard loginFormTextFields[0].text != "" && loginFormTextFields[1].text != "" else {
-            self.presentUserAlert(title: "Login Form Incomplete!", message: OTMError.incompleteLoginForm.rawValue)
+            self.presentUserAlert(title: "Login Form Incomplete!", message: OTMAlertMessage.incompleteLoginForm)
             return
         }
         
@@ -109,7 +119,7 @@ class LoginViewController: UIViewController {
         }
         
         let credentials = UserCredentials(username: username, password: password)
-        OTMNetworkController.createUserSession(using: credentials) { [weak self] (result) in
+        OTMNetworkController.shared.getUserSession(using: credentials) { [weak self] (result) in
             guard let self = self else { return }
             
             DispatchQueue.main.async {
@@ -120,8 +130,8 @@ class LoginViewController: UIViewController {
                 switch result {
                     
                 //if login success, segue to next vc / screen
-                case.success:
-                    print("Success! UserSession created.")
+                case.success(let session):
+                    print("Success! UserSession created with session ID: \(session.id)")
                     self.performSegue(withIdentifier: self.segueToTabBarController, sender: nil)
                     
                 //if login error, present error alert with specific error reason to user
@@ -172,8 +182,6 @@ extension LoginViewController: UINavigationControllerDelegate {
         let kbSize = userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue //of CGRect
         return kbSize.cgRectValue.height
     }
-    
-    
 }
 
 

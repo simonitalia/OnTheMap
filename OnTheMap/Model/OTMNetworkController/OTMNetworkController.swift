@@ -11,7 +11,15 @@ import Foundation
 
 class OTMNetworkController {
     
+    static var shared = OTMNetworkController()
+    private var userSession: SessionResponse?
+    
     private enum Endpoint {
+        
+        enum httpMethod {
+            static let post = "POST"
+            static let delete = "DELETE"
+        }
         
         //url components
         enum URLComponent {
@@ -47,7 +55,7 @@ class OTMNetworkController {
                 
             //student location endpoint + query items
             case .studentLocations(let limit, let skip):
-                var components = self.getURLComponents(with: URLPath.studentLocation)
+                var components = self.getURLComponents(appendingWith: URLPath.studentLocation)
                 components.queryItems = [
                     URLQueryItem(name: QueryItem.limit, value: "\(limit)"),
                     URLQueryItem(name: QueryItem.skip, value: "\(skip)"),
@@ -58,7 +66,7 @@ class OTMNetworkController {
   
             //unique student endpoint + query items
             case .locationForStudent(let key):
-                var components = self.getURLComponents(with: URLPath.studentLocation)
+                var components = self.getURLComponents(appendingWith: URLPath.studentLocation)
                 components.queryItems = [
                     URLQueryItem(name: QueryItem.uniqueKey, value: "\(key)")
                 ]
@@ -67,12 +75,12 @@ class OTMNetworkController {
                 
             //user session api urls
             case .userSession:
-                return self.getURLComponents(with: URLPath.session).url
+                return self.getURLComponents(appendingWith: URLPath.session).url
             }
         }
         
         //construct base URL from url components
-        func getURLComponents(with path: String) -> URLComponents {
+        func getURLComponents(appendingWith path: String) -> URLComponents {
             var components = URLComponents()
             components.scheme = URLComponent.scheme
             components.host = URLComponent.host
@@ -83,13 +91,14 @@ class OTMNetworkController {
     
     
     //MARK:- Session Management Methods
-    class func createUserSession(using credentials: UserCredentials, completion: @escaping (Result <SessionResponse, OTMError>) -> Void) {
+    //GET Session
+    func getUserSession(using credentials: UserCredentials, completion: @escaping (Result <Session, OTMError>) -> Void) {
         
         //safely check url enpoint can be constructed
         guard let url = Endpoint.userSession.url else { return }
         
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
+        request.httpMethod = Endpoint.httpMethod.post
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         //create POSTSession object
@@ -104,33 +113,30 @@ class OTMNetworkController {
             print("POST Error! Encoding POSTSession object failed,")
         }
         
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             
             //handle random network error
             if let error = error {
                 completion(.failure(.unableToComplete))
                 print("POST Error! Could not create user session. Reason: \(error.localizedDescription)")
+                return
             }
            
             //handle failed http response
-            if let httpResponse = response as? HTTPURLResponse  {
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
                 
                 //catch error response code
                 switch httpResponse.statusCode {
                 
-                //client side error
-                case 400, 403:
+                //wrong credentials error
+                case 403:
                     completion(.failure(.invalidCredentials))
                     return
                 
-                //server side error
-                case 500:
+                //server side or other client error
+                default:
                     completion(.failure(.invalidResponse))
                     return
-                    
-                default:
-                    break
                 }
             }
             
@@ -147,8 +153,9 @@ class OTMNetworkController {
             do {
                 let range = 5..<data.count
                 let newData = data.subdata(in: range)
-                let sessionObject = try decoder.decode(SessionResponse.self, from: newData)
-                completion(.success(sessionObject))
+                let userSession = try decoder.decode(SessionResponse.self, from: newData)
+                OTMNetworkController.shared.userSession = userSession
+                completion(.success(userSession.session))
                 
             //handle bad data returned
             } catch {
@@ -159,23 +166,85 @@ class OTMNetworkController {
         task.resume()
     }
     
+    //DELETE User Session
+    func deleteUserSession(completion: @escaping (Result<DeleteSession, OTMError>) -> Void) {
+        
+        //safely check url enpoint can be constructed
+        guard let url = Endpoint.userSession.url else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = Endpoint.httpMethod.delete
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let body = OTMNetworkController.shared.userSession?.session.id
+        request.httpBody = try! JSONEncoder().encode(body)
+        
+        var xsrfCookie: HTTPCookie? = nil
+        let sharedCookieStorage = HTTPCookieStorage.shared
+        for cookie in sharedCookieStorage.cookies! {
+            if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
+        }
+
+        if let xsrfCookie = xsrfCookie {
+            request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+        }
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            //handle general error
+            if let error = error {
+                completion(.failure(.unableToComplete))
+                print("Error! Could not log user out Reason: \(error.localizedDescription)")
+                return
+            }
+            
+            let httpURLResponse = response as? HTTPURLResponse
+            
+            //bad http response
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+                completion(.failure(.invalidResponse))
+                return
+            }
+            
+            //handle no data returned
+            guard let data = data else {
+                completion(.failure(.invalidData))
+                return
+            }
+          
+            //decode JSON Data Response object
+            let decoder = JSONDecoder()
+            
+            do {
+                let range = 5..<data.count
+                let newData = data.subdata(in: range)
+                let deleteSession = try decoder.decode(DeleteSession.self, from: newData)
+                OTMNetworkController.shared.userSession = nil //set session object to nil
+                completion(.success(deleteSession))
+                
+            } catch {
+                completion(.failure(.invalidData))
+            }
+        }
+        
+        task.resume()
+    }
+    
     
     //MARK:- Student Location Methods
-    class func getStudentLocations(with limit: Int, skipItems: Int, completion: @escaping (Result <StudentLocations, OTMError>) -> Void) {
+    func getStudentLocations(with limit: Int, skipItems: Int, completion: @escaping (Result <StudentLocations, OTMError>) -> Void) {
         
         //safely check url enpoint can be constructed
         guard let url = Endpoint.studentLocations(limitedTo: limit, skipping: skipItems).url else { return }
         
         let request = URLRequest(url: url)
-        print("getStudentLocations Url: \(request)") //for debugging
-        let session = URLSession.shared
-        
-        let task = session.dataTask(with: request) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             
             //handle random network error
             if let error = error {
                 completion(.failure(.unableToComplete))
                 print("GET Error! Could not fetch Student Locations. Reason: \(error.localizedDescription)")
+                return
             }
             
             //bad http response
@@ -184,12 +253,13 @@ class OTMNetworkController {
                 return
             }
             
-            //bad data returned, or alternate message like api rate limit exceeded
+            //no data returned
             guard let data = data else {
                 completion(.failure(.invalidData))
                 return
             }
             
+            //handle successful response
             do {
                 let decoder = JSONDecoder()
                 let locations = try decoder.decode(StudentLocations.self, from: data)
@@ -204,7 +274,7 @@ class OTMNetworkController {
     }
 
     
-    class func postStudentLocation(object: StudentInformation) {
+    func postStudentLocation(object: StudentInformation) {
         
         let url = URL(string: "")
         var request = URLRequest(url: url!)
@@ -212,9 +282,7 @@ class OTMNetworkController {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = "{\"uniqueKey\": \"1234\", \"firstName\": \"John\", \"lastName\": \"Doe\",\"mapString\": \"Mountain View, CA\", \"mediaURL\": \"https://udacity.com\",\"latitude\": 37.386052, \"longitude\": -122.083851}".data(using: .utf8)
         
-        let session = URLSession.shared
-        
-        let task = session.dataTask(with: request) { data, response, error in
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
               if error != nil { // Handle error…
                   return
               }

@@ -8,13 +8,17 @@
 
 import Foundation
 
-struct OTMResponse: Codable {
-    let statusCode: Int
-    let statusMessage: String
+struct OTMErrorResponse: Codable, Error {
+    let status: String
+    let message: String
     
     enum CodingKeys: String, CodingKey {
-        case statusCode = "status"
-        case statusMessage = "error"
+        case status
+        case message = "error"
+    }
+    
+    var errorMessage: String {
+        return message
     }
 }
 

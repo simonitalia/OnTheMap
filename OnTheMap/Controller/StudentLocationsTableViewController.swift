@@ -20,6 +20,13 @@ class StudentLocationsTableViewController: UITableViewController {
     }
     
     
+    //storyboard action outlets
+    @IBAction func logoutButtonTapped(_ sender: Any) {
+        self.performUserLogOut()
+    }
+    
+    
+    
     //MARK:- View LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +74,7 @@ class StudentLocationsTableViewController: UITableViewController {
              
             //guard against badly formatted medialURL
             } else {
-                self.presentUserAlert(title: "Bad URL Scheme!", message: OTMError.badURL.rawValue)
+                self.presentUserAlert(title: "Bad URL Scheme!", message: OTMAlertMessage.badURL)
             }
         }
     }

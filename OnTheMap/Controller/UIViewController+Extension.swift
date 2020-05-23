@@ -29,4 +29,20 @@ extension UIViewController {
     func createFullName(with firstName: String, and lastName: String) -> String {
         return "\(firstName) \(lastName)"
     }
+    
+    
+    func performUserLogOut() {
+        OTMNetworkController.shared.deleteUserSession() { (result) in
+            
+            switch result {
+            case .success(let deleteSession):
+                //seugue back to login screen
+                print("Success! Deleted sessionID: \(deleteSession.session.id)")
+                
+            case .failure(let error):
+                //present error alart
+                print("Error! Failed to log user out. Reason: \(error.rawValue)")
+            }
+        }
+    }
 }

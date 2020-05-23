@@ -129,7 +129,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="LBs-bo-8xk"/>
                     </view>
-                    <navigationItem key="navigationItem" title="On the Map" id="KDX-ew-N1L"/>
+                    <navigationItem key="navigationItem" title="On the Map" id="KDX-ew-N1L">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="IZw-g4-jOh">
+                            <connections>
+                                <action selector="logoutButtonTapped:" destination="xlr-8R-jfq" id="WSe-Us-njD"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="bfl-ar-F8W" id="XEd-aY-qcr"/>
                     </connections>
@@ -181,7 +187,13 @@
                             <outlet property="delegate" destination="DMw-OP-cYf" id="yFU-lx-cGS"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="On the Map" id="EPW-1S-rAR"/>
+                    <navigationItem key="navigationItem" title="On the Map" id="EPW-1S-rAR">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="e3d-eJ-1er">
+                            <connections>
+                                <action selector="logoutButtonTapped:" destination="DMw-OP-cYf" id="9aM-Tw-d5E"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="apx-aj-vsb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

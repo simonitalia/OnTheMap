@@ -11,6 +11,7 @@ import MapKit
 
 class StudentLocationsMapViewController: UIViewController {
     
+    
     //get reference to shared app delegate object
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -23,6 +24,13 @@ class StudentLocationsMapViewController: UIViewController {
     
     //storyboard outlets
     @IBOutlet weak var mapView: MKMapView!
+    
+    
+    //Storboard action outlets
+    @IBAction func logoutButtonTapped(_ sender: Any) {
+        self.performUserLogOut()
+    }
+    
     
     
     //MARK:- View LifeCycle
@@ -46,7 +54,7 @@ class StudentLocationsMapViewController: UIViewController {
     
     @objc private func fireGetStudentLocations() {
         
-        OTMNetworkController.getStudentLocations(with: appDelegate.itemsLimit, skipItems: appDelegate.studentLocations.count) { (result) in
+        OTMNetworkController.shared.getStudentLocations(with: appDelegate.itemsLimit, skipItems: appDelegate.studentLocations.count) { (result) in
             
             switch result {
             case .success(let studentLocations):
@@ -124,7 +132,7 @@ extension StudentLocationsMapViewController: MKMapViewDelegate {
                  
                 //guard against badly formatted medialURL
                 } else {
-                    self.presentUserAlert(title: "Bad URL Scheme!", message: OTMError.badURL.rawValue)
+                    self.presentUserAlert(title: "Bad URL Scheme!", message: OTMAlertMessage.badURL)
                 }
             }
         }
