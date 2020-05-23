@@ -22,9 +22,8 @@ class StudentLocationsTableViewController: UITableViewController {
     
     //storyboard action outlets
     @IBAction func logoutButtonTapped(_ sender: Any) {
-        self.performUserLogOut()
+        performUserLogOut()
     }
-    
     
     
     //MARK:- View LifeCycle

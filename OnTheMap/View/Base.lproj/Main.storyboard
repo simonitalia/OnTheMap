@@ -138,9 +138,11 @@
                     </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="bfl-ar-F8W" id="XEd-aY-qcr"/>
+                        <segue destination="D0j-bD-tIP" kind="unwind" identifier="unwindToLoginVC" unwindAction="unwindToLoginVCWithSegue:" id="EX0-y7-HQF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fbe-ED-wqg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="D0j-bD-tIP" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="560.79999999999995" y="1682.608695652174"/>
         </scene>
@@ -194,8 +196,12 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <segue destination="YmL-a7-tf3" kind="unwind" identifier="unwindToLoginVC" unwindAction="unwindToLoginVCWithSegue:" id="1sQ-Jp-zAm"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="apx-aj-vsb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="YmL-a7-tf3" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1774" y="1683"/>
         </scene>

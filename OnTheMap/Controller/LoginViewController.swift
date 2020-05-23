@@ -8,10 +8,17 @@
 
 import UIKit
 
+//properties
+enum SegueIdentifier {
+    static let segueToTabBarController = "LoginVCToTabBarController"
+    static let segueToLoginVC = "unwindToLoginVC"
+}
+
 class LoginViewController: UIViewController {
     
-    //properties
-    private let segueToTabBarController = "LoginVCToTabBarController"
+    //get reference to shared app delegate object
+    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    
     private let udacityWebSignin = "https://auth.udacity.com/sign-in"
     private var isKeyboardVisible = false
     
@@ -24,7 +31,7 @@ class LoginViewController: UIViewController {
     
     //storyboard actions
     @IBAction func loginButtonTapped(_ sender: Any) {
-        fireCreateUserSession()
+        performUserLogin()
     }
     
     
@@ -73,18 +80,23 @@ class LoginViewController: UIViewController {
     
     
     private func loggingUserIn(_ flag: Bool) {
-        if flag {
-            activityIndicator.startAnimating()
-            loginStackViews.forEach { $0.isUserInteractionEnabled = false }
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
             
-        } else {
-            activityIndicator.stopAnimating()
-            loginStackViews.forEach { $0.isUserInteractionEnabled = true }
+            if flag {
+                self.activityIndicator.startAnimating()
+                self.loginStackViews.forEach { $0.isUserInteractionEnabled = false }
+                
+            } else {
+                self.activityIndicator.stopAnimating()
+                self.loginStackViews.forEach { $0.isUserInteractionEnabled = true }
+            }
         }
     }
     
     
-    private func fireCreateUserSession() {
+    private func performUserLogin() {
         
         //ensure both email and password fields have data
         guard loginFormTextFields.count == 2 else {
@@ -98,7 +110,7 @@ class LoginViewController: UIViewController {
         }
         
         //start activity indicator animation
-        self.loggingUserIn(true)
+        loggingUserIn(true)
         
         //set username / password from text fields
         var username = String()
@@ -121,24 +133,35 @@ class LoginViewController: UIViewController {
         let credentials = UserCredentials(username: username, password: password)
         OTMNetworkController.shared.getUserSession(using: credentials) { [weak self] (result) in
             guard let self = self else { return }
-            
-            DispatchQueue.main.async {
                 
-                //stop activity indicator animation
-                self.loggingUserIn(false)
+            //stop activity indicator animation
+            self.loggingUserIn(false)
 
-                switch result {
-                    
-                //if login success, segue to next vc / screen
-                case.success(let session):
-                    print("Success! UserSession created with session ID: \(session.id)")
-                    self.performSegue(withIdentifier: self.segueToTabBarController, sender: nil)
-                    
-                //if login error, present error alert with specific error reason to user
-                case .failure(let error):
-                    self.presentUserAlert(title: "Uh Oh!", message: error.rawValue)
-                }
+            switch result {
+                
+            //if login success, segue to next vc / screen
+            case.success(let sessionResponse):
+                print("Success! UserSession created with session ID: \(sessionResponse.session.id)")
+                
+                //set shared userSession property and perform segue
+                self.appDelegate.userSession = sessionResponse
+                self.performSegue(with: SegueIdentifier.segueToTabBarController)
+                
+            //if login error, present error alert with specific error reason to user
+            case .failure(let error):
+                self.presentUserAlert(title: "Uh Oh!", message: error.rawValue)
             }
+        }
+    }
+    
+    
+    //log out navigation
+    @IBAction func unwindToLoginVC(segue: UIStoryboardSegue) {
+        //returns user to this VC upon logout from any VC
+        
+        //set shared userSession object to nil
+        if segue.identifier == SegueIdentifier.segueToLoginVC {
+            self.appDelegate.userSession = nil //set session object to nil
         }
     }
 }

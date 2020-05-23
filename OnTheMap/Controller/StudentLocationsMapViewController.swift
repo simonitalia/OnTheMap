@@ -11,7 +11,6 @@ import MapKit
 
 class StudentLocationsMapViewController: UIViewController {
     
-    
     //get reference to shared app delegate object
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -28,9 +27,8 @@ class StudentLocationsMapViewController: UIViewController {
     
     //Storboard action outlets
     @IBAction func logoutButtonTapped(_ sender: Any) {
-        self.performUserLogOut()
+        performUserLogOut()
     }
-    
     
     
     //MARK:- View LifeCycle

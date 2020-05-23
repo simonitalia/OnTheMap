@@ -31,13 +31,22 @@ extension UIViewController {
     }
     
     
+    func performSegue(with Identifier: String) {
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: Identifier, sender: self)
+        }
+    }
+    
+    
     func performUserLogOut() {
         OTMNetworkController.shared.deleteUserSession() { (result) in
             
             switch result {
             case .success(let deleteSession):
-                //seugue back to login screen
                 print("Success! Deleted sessionID: \(deleteSession.session.id)")
+                
+                //seugue back to login screen
+                self.performSegue(with: SegueIdentifier.segueToLoginVC)
                 
             case .failure(let error):
                 //present error alart

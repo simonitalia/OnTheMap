@@ -11,7 +11,11 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    //shared property for storing feteched student locations
+    //shared global properties
+    //user session mananagmment
+    var userSession: SessionResponse?
+    
+    //feteched student locations
     var studentLocations = [StudentInformation]()
     var itemsLimit = 100
 

@@ -6,13 +6,11 @@
 //  Copyright © 2020 SDI Group Inc. All rights reserved.
 //
 
-import Foundation
-
+import UIKit
 
 class OTMNetworkController {
     
     static var shared = OTMNetworkController()
-    private var userSession: SessionResponse?
     
     private enum Endpoint {
         
@@ -92,7 +90,7 @@ class OTMNetworkController {
     
     //MARK:- Session Management Methods
     //GET Session
-    func getUserSession(using credentials: UserCredentials, completion: @escaping (Result <Session, OTMError>) -> Void) {
+    func getUserSession(using credentials: UserCredentials, completion: @escaping (Result <SessionResponse, OTMError>) -> Void) {
         
         //safely check url enpoint can be constructed
         guard let url = Endpoint.userSession.url else { return }
@@ -153,9 +151,8 @@ class OTMNetworkController {
             do {
                 let range = 5..<data.count
                 let newData = data.subdata(in: range)
-                let userSession = try decoder.decode(SessionResponse.self, from: newData)
-                OTMNetworkController.shared.userSession = userSession
-                completion(.success(userSession.session))
+                let sessionResponse = try decoder.decode(SessionResponse.self, from: newData)
+                completion(.success(sessionResponse))
                 
             //handle bad data returned
             } catch {
@@ -176,7 +173,8 @@ class OTMNetworkController {
         request.httpMethod = Endpoint.httpMethod.delete
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        let body = OTMNetworkController.shared.userSession?.session.id
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let body = appDelegate.userSession?.session //pass userSession object to remote server
         request.httpBody = try! JSONEncoder().encode(body)
         
         var xsrfCookie: HTTPCookie? = nil
@@ -197,9 +195,7 @@ class OTMNetworkController {
                 print("Error! Could not log user out Reason: \(error.localizedDescription)")
                 return
             }
-            
-            let httpURLResponse = response as? HTTPURLResponse
-            
+
             //bad http response
             guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
                 completion(.failure(.invalidResponse))
@@ -219,7 +215,6 @@ class OTMNetworkController {
                 let range = 5..<data.count
                 let newData = data.subdata(in: range)
                 let deleteSession = try decoder.decode(DeleteSession.self, from: newData)
-                OTMNetworkController.shared.userSession = nil //set session object to nil
                 completion(.success(deleteSession))
                 
             } catch {
