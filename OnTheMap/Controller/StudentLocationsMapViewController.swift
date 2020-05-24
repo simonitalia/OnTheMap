@@ -11,16 +11,6 @@ import MapKit
 
 class StudentLocationsMapViewController: UIViewController {
     
-    //get reference to shared app delegate object
-    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    
-    
-    //set student locations data locally
-    private var studentLocations: [StudentInformation] {
-        return appDelegate.studentLocations
-    }
-    
-    
     //storyboard outlets
     @IBOutlet weak var mapView: MKMapView!
     
@@ -41,40 +31,22 @@ class StudentLocationsMapViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
     }
     
     
     private func configureUI() {
-        performSelector(inBackground: #selector(fireGetStudentLocations), with: nil)
-    }
-    
-    
-    @objc private func fireGetStudentLocations() {
         
-        OTMNetworkController.shared.getStudentLocations(with: appDelegate.itemsLimit, skipItems: appDelegate.studentLocations.count) { (result) in
-            
-            switch result {
-            case .success(let studentLocations):
-                print("Success! StudentLocations fetched.")
-                
-                //save studentloactins to shared object
-                self.appDelegate.studentLocations.append(contentsOf: studentLocations.locations)
-                
-                //create map annotations and set pins
-                self.createMapAnnotations()
-                
-            case .failure(let error):
-                self.presentUserAlert(title: "Student Locations Download Error!", message: error.rawValue)
-            }
+        //fetch student locations data, create map annotations and set pins
+        performGetStudentLocations {
+            self.createMapAnnotations()
         }
     }
     
-    
+
     private func createMapAnnotations() {
-        guard !studentLocations.isEmpty else { return }
+        guard !AppDelegate.studentLocations.isEmpty else { return }
         
-        studentLocations.forEach {
+        AppDelegate.studentLocations.forEach {
             let annotation = MKPointAnnotation()
             
             //set title and subtitle text

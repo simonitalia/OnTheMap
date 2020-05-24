@@ -10,16 +10,6 @@ import UIKit
 
 class StudentLocationsTableViewController: UITableViewController {
     
-    //properties
-    private let resuseIdentifier = "StudentLocationCell"
-    
-    //set student locations data locally
-    private var studentLocations: [StudentInformation] {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        return appDelegate.studentLocations
-    }
-    
-    
     //storyboard action outlets
     @IBAction func logoutButtonTapped(_ sender: Any) {
         performUserLogOut()
@@ -45,7 +35,7 @@ class StudentLocationsTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return studentLocations.count
+        return AppDelegate.studentLocations.count
     }
 
     
@@ -54,15 +44,15 @@ class StudentLocationsTableViewController: UITableViewController {
 
         //configure cell
         let row = indexPath.row
-        let name = createFullName(with: studentLocations[row].firstName, and: studentLocations[row].lastName)
+        let name = createFullName(with: AppDelegate.studentLocations[row].firstName, and: AppDelegate.studentLocations[row].lastName)
         cell.textLabel?.text = name
-        cell.detailTextLabel?.text = studentLocations[row].mediaURL
+        cell.detailTextLabel?.text = AppDelegate.studentLocations[row].mediaURL
         return cell
     }
     
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let studentInformation = studentLocations[indexPath.row]
+        let studentInformation = AppDelegate.studentLocations[indexPath.row]
         
         //open mediaURL in safari on row tap
         if let url = URL(string: studentInformation.mediaURL) {

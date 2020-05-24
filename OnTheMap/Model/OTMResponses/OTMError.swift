@@ -8,6 +8,8 @@
 
 import Foundation
 
+
+//custom errors
 enum OTMError: String, Error {
     
     //POST Session specific Error cases
@@ -18,6 +20,21 @@ enum OTMError: String, Error {
     case invalidResponse = "Invalid response from server.\nPlease try again." //500 server error
     case unableToComplete = "Unable to complete request.\nPlease check internet connection."
    
-    //bad data errors
+    //bad data or decoding errors
+    case unableToParseJSON = "Error parsing JSON data, please try again"
     case invalidData = "Data received from server was invalid.\nPlease try again."
+}
+
+
+//server error response data format
+extension OTMError {
+    struct OTMError: Codable, Error {
+        let status: String
+        let message: String
+        
+        enum CodingKeys: String, CodingKey {
+            case status
+            case message = "error"
+        }
+    }
 }

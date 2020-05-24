@@ -57,7 +57,7 @@ class OTMNetworkController {
                 components.queryItems = [
                     URLQueryItem(name: QueryItem.limit, value: "\(limit)"),
                     URLQueryItem(name: QueryItem.skip, value: "\(skip)"),
-                    URLQueryItem(name: QueryItem.order, value: "-updatedAt")
+                    URLQueryItem(name: QueryItem.order, value: "-updatedAt") //desc, newest first order
                 ]
                 
                 return components.url
@@ -108,12 +108,12 @@ class OTMNetworkController {
 
         //handle object JSON encoding error
         } catch {
-            print("POST Error! Encoding POSTSession object failed,")
+            completion(.failure(.unableToParseJSON))
         }
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             
-            //handle random network error
+            //handle general (eg: network) error
             if let error = error {
                 completion(.failure(.unableToComplete))
                 print("POST Error! Could not create user session. Reason: \(error.localizedDescription)")
@@ -156,7 +156,7 @@ class OTMNetworkController {
                 
             //handle bad data returned
             } catch {
-                completion(.failure(.invalidData))
+                completion(.failure(.unableToParseJSON))
             }
         }
         
@@ -173,9 +173,16 @@ class OTMNetworkController {
         request.httpMethod = Endpoint.httpMethod.delete
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let body = appDelegate.userSession?.session //pass userSession object to remote server
-        request.httpBody = try! JSONEncoder().encode(body)
+        let bodyData = AppDelegate.userSession?.session //pass userSession object to remote server
+        
+        //Perform POST Request
+        do {
+            request.httpBody = try JSONEncoder().encode(bodyData)
+
+        //handle object JSON encoding error
+        } catch {
+            completion(.failure(.unableToParseJSON))
+        }
         
         var xsrfCookie: HTTPCookie? = nil
         let sharedCookieStorage = HTTPCookieStorage.shared
@@ -189,7 +196,7 @@ class OTMNetworkController {
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             
-            //handle general error
+            //handle general (eg: network) error
             if let error = error {
                 completion(.failure(.unableToComplete))
                 print("Error! Could not log user out Reason: \(error.localizedDescription)")
@@ -218,7 +225,7 @@ class OTMNetworkController {
                 completion(.success(deleteSession))
                 
             } catch {
-                completion(.failure(.invalidData))
+                completion(.failure(.unableToParseJSON))
             }
         }
         
@@ -235,7 +242,7 @@ class OTMNetworkController {
         let request = URLRequest(url: url)
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             
-            //handle random network error
+            //handle general (eg: network) error
             if let error = error {
                 completion(.failure(.unableToComplete))
                 print("GET Error! Could not fetch Student Locations. Reason: \(error.localizedDescription)")
@@ -261,7 +268,7 @@ class OTMNetworkController {
                 completion(.success(locations))
                 
             } catch {
-                completion(.failure(.invalidData))
+                completion(.failure(.unableToParseJSON))
             }
         }
         

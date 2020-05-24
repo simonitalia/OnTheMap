@@ -9,6 +9,7 @@
 import UIKit
 import SafariServices
 
+
 extension UIViewController {
      
     func presentUserAlert(title: String, message: String) {
@@ -34,6 +35,25 @@ extension UIViewController {
     func performSegue(with Identifier: String) {
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: Identifier, sender: self)
+        }
+    }
+    
+    
+    @objc func performGetStudentLocations(completion: @escaping () -> Void) {
+
+        OTMNetworkController.shared.getStudentLocations(with: AppDelegate.itemsLimit, skipItems: AppDelegate.studentLocations.count) { (result) in
+
+            switch result {
+            case .success(let studentLocations):
+                print("Success! StudentLocations fetched.")
+
+                //save studentloactins to shared object
+                AppDelegate.studentLocations.append(contentsOf: studentLocations.locations)
+                completion()
+                
+            case .failure(let error):
+                self.presentUserAlert(title: "Student Locations Download Error!", message: error.rawValue)
+            }
         }
     }
     

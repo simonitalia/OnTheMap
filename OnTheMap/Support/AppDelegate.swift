@@ -11,15 +11,15 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    //shared global properties
+    //MARK:- Shared Global properties
     //user session mananagmment
-    var userSession: SessionResponse?
+    static var userSession: SessionResponse?
     
-    //feteched student locations
-    var studentLocations = [StudentInformation]()
-    var itemsLimit = 100
+    //fetched student locations
+    static var studentLocations = [StudentInformation]()
+    static var itemsLimit = 100
 
-
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         return true

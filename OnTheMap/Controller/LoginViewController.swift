@@ -16,9 +16,6 @@ enum SegueIdentifier {
 
 class LoginViewController: UIViewController {
     
-    //get reference to shared app delegate object
-    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    
     private let udacityWebSignin = "https://auth.udacity.com/sign-in"
     private var isKeyboardVisible = false
     
@@ -144,7 +141,7 @@ class LoginViewController: UIViewController {
                 print("Success! UserSession created with session ID: \(sessionResponse.session.id)")
                 
                 //set shared userSession property and perform segue
-                self.appDelegate.userSession = sessionResponse
+                AppDelegate.userSession = sessionResponse
                 self.performSegue(with: SegueIdentifier.segueToTabBarController)
                 
             //if login error, present error alert with specific error reason to user
@@ -161,7 +158,7 @@ class LoginViewController: UIViewController {
         
         //set shared userSession object to nil
         if segue.identifier == SegueIdentifier.segueToLoginVC {
-            self.appDelegate.userSession = nil //set session object to nil
+            AppDelegate.userSession = nil //set session object to nil
         }
     }
 }
