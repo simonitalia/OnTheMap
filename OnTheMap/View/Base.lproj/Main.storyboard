@@ -135,6 +135,14 @@
                                 <action selector="logoutButtonTapped:" destination="xlr-8R-jfq" id="WSe-Us-njD"/>
                             </connections>
                         </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem image="icon_addpin" id="r2K-xf-w21"/>
+                            <barButtonItem image="icon_refresh" id="S8Z-Sc-U1D">
+                                <connections>
+                                    <action selector="refreshStudentLocationsButtonTapped:" destination="xlr-8R-jfq" id="txn-6B-wSN"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="bfl-ar-F8W" id="XEd-aY-qcr"/>
@@ -195,6 +203,14 @@
                                 <action selector="logoutButtonTapped:" destination="DMw-OP-cYf" id="9aM-Tw-d5E"/>
                             </connections>
                         </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem image="icon_addpin" id="UFx-AE-I16"/>
+                            <barButtonItem image="icon_refresh" id="3hf-4z-XDl">
+                                <connections>
+                                    <action selector="refreshStudentLocationsButtonTapped:" destination="DMw-OP-cYf" id="h7K-B4-nlN"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <segue destination="YmL-a7-tf3" kind="unwind" identifier="unwindToLoginVC" unwindAction="unwindToLoginVCWithSegue:" id="1sQ-Jp-zAm"/>
@@ -265,9 +281,11 @@
         </scene>
     </scenes>
     <resources>
+        <image name="icon_addpin" width="24" height="24"/>
         <image name="icon_listview-deselected" width="75" height="50"/>
         <image name="icon_mapview-deselected" width="75" height="50"/>
         <image name="icon_pin" width="24" height="24"/>
+        <image name="icon_refresh" width="24" height="24"/>
         <image name="logo-u" width="62" height="62"/>
     </resources>
 </document>

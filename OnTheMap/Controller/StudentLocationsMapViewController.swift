@@ -16,6 +16,11 @@ class StudentLocationsMapViewController: UIViewController {
     
     
     //Storboard action outlets
+    @IBAction func refreshStudentLocationsButtonTapped(_ sender: Any) {
+        configureUI()
+    }
+    
+    
     @IBAction func logoutButtonTapped(_ sender: Any) {
         performUserLogOut()
     }
@@ -70,6 +75,11 @@ extension StudentLocationsMapViewController: MKMapViewDelegate {
     
     //create a pinView
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        //remova all existing annotations first if need be
+//        if !mapView.annotations.isEmpty {
+//            mapView.removeAnnotations([annotation])
+//        }
         
         let reuseId = "pin"
         

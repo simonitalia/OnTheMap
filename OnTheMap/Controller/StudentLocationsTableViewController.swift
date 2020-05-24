@@ -11,6 +11,14 @@ import UIKit
 class StudentLocationsTableViewController: UITableViewController {
     
     //storyboard action outlets
+    @IBAction func refreshStudentLocationsButtonTapped(_ sender: Any) {
+        performGetStudentLocations {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
     @IBAction func logoutButtonTapped(_ sender: Any) {
         performUserLogOut()
     }
