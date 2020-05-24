@@ -8,6 +8,6 @@
 
 import Foundation
 
-struct DeleteSession: Codable {
+struct DELETESession: Codable {
     let session: Session
 }

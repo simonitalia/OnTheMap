@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct PostSession: Codable {
+struct POSTSession: Codable {
     let credentials: UserCredentials
     
     enum CodingKeys: String, CodingKey {

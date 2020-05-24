@@ -16,14 +16,16 @@
 		2A74D6CD2475376700062429 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2A74D6CC2475376700062429 /* Assets.xcassets */; };
 		2A74D6D02475376700062429 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2A74D6CE2475376700062429 /* LaunchScreen.storyboard */; };
 		2A74D6E72475394800062429 /* StudentInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A74D6E62475394700062429 /* StudentInformation.swift */; };
-		2A74D6E92475395800062429 /* PostSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A74D6E82475395800062429 /* PostSession.swift */; };
+		2A74D6E92475395800062429 /* POSTSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A74D6E82475395800062429 /* POSTSession.swift */; };
 		2A74D6EB2475396500062429 /* OTMNetworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A74D6EA2475396500062429 /* OTMNetworkController.swift */; };
 		2A74D6EF24753A4700062429 /* SessionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A74D6EE24753A4600062429 /* SessionResponse.swift */; };
+		2A76C7AA247A256000376AAC /* StudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A76C7A9247A256000376AAC /* StudentLocation.swift */; };
+		2A76C7AC247A26DE00376AAC /* POSTStudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A76C7AB247A26DE00376AAC /* POSTStudentLocation.swift */; };
 		2A8622BF247772CE007EC715 /* StudentLocationsMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8622BE247772CE007EC715 /* StudentLocationsMapViewController.swift */; };
 		2A9B2AF024761C20003905EF /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9B2AEF24761C20003905EF /* UIViewController+Extension.swift */; };
 		2A9B2AF224762C94003905EF /* OTMErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9B2AF124762C94003905EF /* OTMErrorResponse.swift */; };
 		2AB3763F24790C3E00228ABD /* OTMAlertMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB3763E24790C3E00228ABD /* OTMAlertMessage.swift */; };
-		2AB376412479284700228ABD /* DeleteSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB376402479284700228ABD /* DeleteSession.swift */; };
+		2AB376412479284700228ABD /* DELETESession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB376402479284700228ABD /* DELETESession.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,14 +40,16 @@
 		2A74D6CF2475376700062429 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2A74D6D12475376700062429 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2A74D6E62475394700062429 /* StudentInformation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StudentInformation.swift; sourceTree = "<group>"; };
-		2A74D6E82475395800062429 /* PostSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostSession.swift; sourceTree = "<group>"; };
+		2A74D6E82475395800062429 /* POSTSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POSTSession.swift; sourceTree = "<group>"; };
 		2A74D6EA2475396500062429 /* OTMNetworkController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OTMNetworkController.swift; sourceTree = "<group>"; };
 		2A74D6EE24753A4600062429 /* SessionResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionResponse.swift; sourceTree = "<group>"; };
+		2A76C7A9247A256000376AAC /* StudentLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentLocation.swift; sourceTree = "<group>"; };
+		2A76C7AB247A26DE00376AAC /* POSTStudentLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POSTStudentLocation.swift; sourceTree = "<group>"; };
 		2A8622BE247772CE007EC715 /* StudentLocationsMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentLocationsMapViewController.swift; sourceTree = "<group>"; };
 		2A9B2AEF24761C20003905EF /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		2A9B2AF124762C94003905EF /* OTMErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTMErrorResponse.swift; sourceTree = "<group>"; };
 		2AB3763E24790C3E00228ABD /* OTMAlertMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTMAlertMessage.swift; sourceTree = "<group>"; };
-		2AB376402479284700228ABD /* DeleteSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSession.swift; sourceTree = "<group>"; };
+		2AB376402479284700228ABD /* DELETESession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DELETESession.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +117,7 @@
 			children = (
 				2A74D6EE24753A4600062429 /* SessionResponse.swift */,
 				2A74D6E62475394700062429 /* StudentInformation.swift */,
+				2A76C7A9247A256000376AAC /* StudentLocation.swift */,
 				2A9B2AF124762C94003905EF /* OTMErrorResponse.swift */,
 			);
 			path = OTMResponses;
@@ -121,8 +126,9 @@
 		2A74D6F324753B1C00062429 /* OTMRequests */ = {
 			isa = PBXGroup;
 			children = (
-				2A74D6E82475395800062429 /* PostSession.swift */,
-				2AB376402479284700228ABD /* DeleteSession.swift */,
+				2A74D6E82475395800062429 /* POSTSession.swift */,
+				2AB376402479284700228ABD /* DELETESession.swift */,
+				2A76C7AB247A26DE00376AAC /* POSTStudentLocation.swift */,
 			);
 			path = OTMRequests;
 			sourceTree = "<group>";
@@ -239,11 +245,13 @@
 				2AB3763F24790C3E00228ABD /* OTMAlertMessage.swift in Sources */,
 				2A74D6E72475394800062429 /* StudentInformation.swift in Sources */,
 				2A8622BF247772CE007EC715 /* StudentLocationsMapViewController.swift in Sources */,
-				2AB376412479284700228ABD /* DeleteSession.swift in Sources */,
-				2A74D6E92475395800062429 /* PostSession.swift in Sources */,
+				2AB376412479284700228ABD /* DELETESession.swift in Sources */,
+				2A74D6E92475395800062429 /* POSTSession.swift in Sources */,
+				2A76C7AA247A256000376AAC /* StudentLocation.swift in Sources */,
 				2A74D6C82475376500062429 /* LoginViewController.swift in Sources */,
 				2A2294F4247765EE0081F50C /* StudentLocations.swift in Sources */,
 				2A9B2AF224762C94003905EF /* OTMErrorResponse.swift in Sources */,
+				2A76C7AC247A26DE00376AAC /* POSTStudentLocation.swift in Sources */,
 				2A74D6C42475376500062429 /* AppDelegate.swift in Sources */,
 				2A74D6C62475376500062429 /* SceneDelegate.swift in Sources */,
 				2A74D6EB2475396500062429 /* OTMNetworkController.swift in Sources */,

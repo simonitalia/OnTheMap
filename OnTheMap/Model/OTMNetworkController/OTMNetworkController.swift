@@ -100,7 +100,7 @@ class OTMNetworkController {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         //create POSTSession object
-        let bodyData = PostSession(credentials: credentials)
+        let bodyData = POSTSession(credentials: credentials)
 
         //Perform POST Request
         do {
@@ -164,7 +164,7 @@ class OTMNetworkController {
     }
     
     //DELETE User Session
-    func deleteUserSession(completion: @escaping (Result<DeleteSession, OTMErrorResponse>) -> Void) {
+    func deleteUserSession(completion: @escaping (Result<DELETESession, OTMErrorResponse>) -> Void) {
         
         //safely check url enpoint can be constructed
         guard let url = Endpoint.userSession.url else { return }
@@ -221,7 +221,7 @@ class OTMNetworkController {
             do {
                 let range = 5..<data.count
                 let newData = data.subdata(in: range)
-                let deleteSession = try decoder.decode(DeleteSession.self, from: newData)
+                let deleteSession = try decoder.decode(DELETESession.self, from: newData)
                 completion(.success(deleteSession))
                 
             } catch {
