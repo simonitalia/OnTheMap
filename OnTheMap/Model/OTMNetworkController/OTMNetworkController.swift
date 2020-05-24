@@ -90,7 +90,7 @@ class OTMNetworkController {
     
     //MARK:- Session Management Methods
     //GET Session
-    func getUserSession(using credentials: UserCredentials, completion: @escaping (Result <SessionResponse, OTMError>) -> Void) {
+    func getUserSession(using credentials: UserCredentials, completion: @escaping (Result <SessionResponse, OTMErrorResponse>) -> Void) {
         
         //safely check url enpoint can be constructed
         guard let url = Endpoint.userSession.url else { return }
@@ -164,7 +164,7 @@ class OTMNetworkController {
     }
     
     //DELETE User Session
-    func deleteUserSession(completion: @escaping (Result<DeleteSession, OTMError>) -> Void) {
+    func deleteUserSession(completion: @escaping (Result<DeleteSession, OTMErrorResponse>) -> Void) {
         
         //safely check url enpoint can be constructed
         guard let url = Endpoint.userSession.url else { return }
@@ -234,7 +234,7 @@ class OTMNetworkController {
     
     
     //MARK:- Student Location Methods
-    func getStudentLocations(with limit: Int, skipItems: Int, completion: @escaping (Result <StudentLocations, OTMError>) -> Void) {
+    func getStudentLocations(with limit: Int, skipItems: Int, completion: @escaping (Result <StudentLocations, OTMErrorResponse>) -> Void) {
         
         //safely check url enpoint can be constructed
         guard let url = Endpoint.studentLocations(limitedTo: limit, skipping: skipItems).url else { return }
