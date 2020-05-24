@@ -10,7 +10,7 @@
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="LoginViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginVC" id="BYZ-38-t0r" customClass="LoginViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -136,7 +136,11 @@
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem image="icon_addpin" id="r2K-xf-w21"/>
+                            <barButtonItem image="icon_addpin" id="r2K-xf-w21">
+                                <connections>
+                                    <segue destination="9LU-8t-iJ1" kind="show" id="1Wj-Ue-dqv"/>
+                                </connections>
+                            </barButtonItem>
                             <barButtonItem image="icon_refresh" id="S8Z-Sc-U1D">
                                 <connections>
                                     <action selector="refreshStudentLocationsButtonTapped:" destination="xlr-8R-jfq" id="txn-6B-wSN"/>
@@ -204,7 +208,11 @@
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem image="icon_addpin" id="UFx-AE-I16"/>
+                            <barButtonItem image="icon_addpin" id="UFx-AE-I16">
+                                <connections>
+                                    <segue destination="9LU-8t-iJ1" kind="show" id="TEz-ay-OXy"/>
+                                </connections>
+                            </barButtonItem>
                             <barButtonItem image="icon_refresh" id="3hf-4z-XDl">
                                 <connections>
                                     <action selector="refreshStudentLocationsButtonTapped:" destination="DMw-OP-cYf" id="h7K-B4-nlN"/>
@@ -219,7 +227,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="apx-aj-vsb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="YmL-a7-tf3" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1774" y="1683"/>
+            <point key="canvasLocation" x="1743" y="1682"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Mgf-Ee-Rbk">
@@ -279,13 +287,90 @@
             </objects>
             <point key="canvasLocation" x="562" y="914"/>
         </scene>
+        <!--Submit Student Location View Controller-->
+        <scene sceneID="zkx-qr-0Vz">
+            <objects>
+                <viewController storyboardIdentifier="MasterVC" hidesBottomBarWhenPushed="YES" id="9LU-8t-iJ1" customClass="SubmitStudentLocationViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="og4-TE-dOl" customClass="MasterView" customModule="OnTheMap" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_world" translatesAutoresizingMaskIntoConstraints="NO" id="TlV-PI-zek">
+                                <rect key="frame" x="157" y="197" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="hOg-28-QjO"/>
+                                    <constraint firstAttribute="width" secondItem="TlV-PI-zek" secondAttribute="height" multiplier="1:1" id="osG-kj-93W"/>
+                                </constraints>
+                            </imageView>
+                            <stackView opaque="NO" contentMode="scaleAspectFit" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="RaP-j3-DLe">
+                                <rect key="frame" x="20" y="347" width="374" height="170"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Find Location (eg: Cambridge, MA)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vud-uD-b06">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="50"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter media url" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fT0-r2-9zR">
+                                        <rect key="frame" x="0.0" y="60" width="374" height="50"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B6B-Bd-KSL">
+                                        <rect key="frame" x="0.0" y="120" width="374" height="50"/>
+                                        <color key="backgroundColor" red="0.2093498141" green="0.68870566980000003" blue="0.96620899439999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="qWa-BP-SjE"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                        <state key="normal" title="FIND LOCATION">
+                                            <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="findLocationButtonTapped:" destination="9LU-8t-iJ1" eventType="touchUpInside" id="UUW-nC-ktt"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="tzb-yE-fRI">
+                                <rect key="frame" x="188.5" y="413.5" width="37" height="37"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="TlV-PI-zek" firstAttribute="centerX" secondItem="DSb-Jb-HDl" secondAttribute="centerX" id="EOT-yg-VYK"/>
+                            <constraint firstItem="DSb-Jb-HDl" firstAttribute="trailing" secondItem="RaP-j3-DLe" secondAttribute="trailing" constant="20" id="LsC-EY-bFb"/>
+                            <constraint firstItem="tzb-yE-fRI" firstAttribute="centerY" secondItem="DSb-Jb-HDl" secondAttribute="centerY" id="WjW-d5-Xs9"/>
+                            <constraint firstItem="RaP-j3-DLe" firstAttribute="centerY" secondItem="DSb-Jb-HDl" secondAttribute="centerY" id="ZTe-Fh-VAA"/>
+                            <constraint firstItem="RaP-j3-DLe" firstAttribute="top" secondItem="TlV-PI-zek" secondAttribute="bottom" constant="50" id="g3N-0z-Mti"/>
+                            <constraint firstItem="RaP-j3-DLe" firstAttribute="leading" secondItem="DSb-Jb-HDl" secondAttribute="leading" constant="20" id="mbt-6A-Oyg"/>
+                            <constraint firstItem="tzb-yE-fRI" firstAttribute="centerX" secondItem="DSb-Jb-HDl" secondAttribute="centerX" id="s5i-5Z-8xK"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="DSb-Jb-HDl"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="OmW-hC-pvl"/>
+                    <connections>
+                        <outlet property="findLocationButton" destination="B6B-Bd-KSL" id="hW3-SF-iee"/>
+                        <outlet property="locationTextField" destination="Vud-uD-b06" id="6ak-JW-kJI"/>
+                        <outlet property="urlTextField" destination="fT0-r2-9zR" id="KXe-rt-VAJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Tg0-41-XNF" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer enabled="NO" id="Oqo-U9-hIm"/>
+            </objects>
+            <point key="canvasLocation" x="1128" y="2492"/>
+        </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="TEz-ay-OXy"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="icon_addpin" width="24" height="24"/>
         <image name="icon_listview-deselected" width="75" height="50"/>
         <image name="icon_mapview-deselected" width="75" height="50"/>
         <image name="icon_pin" width="24" height="24"/>
         <image name="icon_refresh" width="24" height="24"/>
+        <image name="icon_world" width="52" height="67"/>
         <image name="logo-u" width="62" height="62"/>
     </resources>
 </document>

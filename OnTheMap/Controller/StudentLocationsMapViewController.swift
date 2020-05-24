@@ -76,11 +76,6 @@ extension StudentLocationsMapViewController: MKMapViewDelegate {
     //create a pinView
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
-        //remova all existing annotations first if need be
-//        if !mapView.annotations.isEmpty {
-//            mapView.removeAnnotations([annotation])
-//        }
-        
         let reuseId = "pin"
         
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
