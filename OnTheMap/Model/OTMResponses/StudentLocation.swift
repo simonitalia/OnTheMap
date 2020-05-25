@@ -9,10 +9,16 @@
 import Foundation
 
 struct StudentLocation: Codable {
-    let createdAt: String
-    let objectID: String
-    var updatedAt: String?
+    var createdAt: String
+    let objectId: String
 }
+
+
+struct StudentLocationUpdate {
+    let updatedAt: String
+}
+
+
 
 
 

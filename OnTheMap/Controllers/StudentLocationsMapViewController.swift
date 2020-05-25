@@ -61,7 +61,6 @@ class StudentLocationsMapViewController: UIViewController {
     private func createMapAnnotations() {
         guard !AppDelegate.studentLocations.isEmpty else { return }
         
-
         AppDelegate.studentLocations.forEach {
             let annotation = MKPointAnnotation()
             
@@ -86,10 +85,7 @@ class StudentLocationsMapViewController: UIViewController {
     //log out navigation
     @IBAction func unwindToStudentLocationsMapVC(segue: UIStoryboardSegue) {
         //returns user to this VC upon submission of student location
-        
     }
-    
-    
 }
 
 

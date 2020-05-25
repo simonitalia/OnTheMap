@@ -22,14 +22,23 @@ class SubmitStudentLocationViewController: UIViewController {
     var mediaURL: String!
     var mapItems: [MKMapItem]!
     
-    var mapItem: MKMapItem? {
+    lazy var mapItem: MKMapItem? = {
         if let mapItem = mapItems.first {
             return mapItem
-        } else {
-            return nil
         }
-    }
+        
+        return nil
+    }()
     
+    lazy var studentLocation: POSTStudentLocation? = {
+        if let mapItem = mapItem {
+            let first = "Magical", last = "Tomato" //hardcode first and last
+            let object = POSTStudentLocation(firstName: first, lastName: last, mapString: mapString, mediaURL: mediaURL, longitude: mapItem.placemark.coordinate.longitude, latitude: mapItem.placemark.coordinate.latitude)
+            return object
+        }
+        
+        return nil
+    }()
     
     //MARK:- Storyboard Connections
     //storyboard outlets
@@ -38,7 +47,7 @@ class SubmitStudentLocationViewController: UIViewController {
     
     //storyboard action outlest
     @IBAction func submitLocationButtonTapped(_ sender: Any) {
-        submitStudentLocation()
+//        submitStudentLocation()
     }
     
     
@@ -58,44 +67,80 @@ class SubmitStudentLocationViewController: UIViewController {
     
     
     private func configureUI() {
-        guard let mapItem = self.mapItem else { return }
-        
-        
-        
-
-        
-        
-        print("mapString object received: \(mapString ?? "no mapString")")
-        print("mapItems object received: \(String(describing: mapItems))")
-        print("mediaURL object received: \(mediaURL ?? "no mediaURL")")
-
-//        openMaps(mapItems: [mapItem], launchOptions: nil)
-
+        createMapAnnotation()
     }
     
     
-    private func submitStudentLocation() {
-        guard let mapItem = self.mapItem else { return }
+    private func createMapAnnotation() {
+        guard let studentLocation = self.studentLocation else { return }
         
-    
-        //note! some values are hard-codes since getting user informationo via uniqueKey won't work since they are randomized values
-//        let postObject = POSTStudentLocation(mapString: mapString, longitude: Double, latitude: Double)
+        let annotation = MKPointAnnotation()
         
+        //set title and subtitle text
+        annotation.title = mapString
         
+        //set coordinates
+        let lat = Double(studentLocation.latitude)
+        let long = Double(studentLocation.longitude)
+        annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
         
-        //on success
-        //set location object
-        //segue back to StudentLocationsMapVC
+        //add annotation to MKMapView
         DispatchQueue.main.async {
-            self.performSegue(withIdentifier: SegueIdentifier.segueToStudentLocationsMapVC, sender: nil)
+            self.mapView.addAnnotation(annotation) //done on main thread so pins appear on view/map load
         }
-        
-        
-        
-        
     }
     
     
-    
 
+    private func submitStudentLocation() {
+        guard let postObject = self.studentLocation else { return }
+     
+        //update existing student location objectID
+        if let objectID = AppDelegate.studentLocation?.objectId {
+            OTMNetworkController.shared.submitStudentLocation(as: .put, with: postObject, objectID: objectID) { (result) in
+                
+                switch result {
+                case .success(let updatedAt):
+                    print("Successs! Updated Student Location with new location.")
+                    
+                    //update student location createdAt with updatedAt response
+//                    AppDelegate.studentLocation?.createdAt = updatedAt
+                    
+                    //perform segue back to StudentLocationsMapVC
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: SegueIdentifier.segueToStudentLocationsMapVC, sender: nil)
+                    }
+                    
+                case .failure:
+                    print("Error! Failed to update Student Location with new location.")
+                    //present error alert
+                    return
+                }
+    
+            }
+         
+        //post new and create new student location object
+        } else {
+            OTMNetworkController.shared.submitStudentLocation(as: .post, with: postObject, objectID: nil) { (result) in
+                        
+                switch result {
+                case .success(let studentLocation):
+                    print("Successs! Created new Student Location.")
+                    
+                    //set student location property
+                    AppDelegate.studentLocation = studentLocation
+                    
+                    //perform segue back to StudentLocationsMapVC
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: SegueIdentifier.segueToStudentLocationsMapVC, sender: nil)
+                    }
+                    
+                case .failure:
+                    print("Error! Failed to create new Student Location")
+                    //present error alert
+                    return
+                }
+            }
+        }
+    }
 }

@@ -15,7 +15,7 @@ struct StudentInformation: Codable {
     let latitude: Float
     let mapString: String
     let mediaURL: String
-    var uniqueKey: String?
+    var uniqueKey: String
     let objectId: String
     let createdAt: String
     let updatedAt: String

@@ -111,7 +111,7 @@
         <!--On the Map-->
         <scene sceneID="sL8-R3-lz7">
             <objects>
-                <viewController id="xlr-8R-jfq" customClass="StudentLocationsMapViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="StudentLocationsMapVC" id="xlr-8R-jfq" customClass="StudentLocationsMapViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RJI-hd-6rR">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -291,7 +291,7 @@
         <scene sceneID="zkx-qr-0Vz">
             <objects>
                 <viewController storyboardIdentifier="MasterVC" hidesBottomBarWhenPushed="YES" id="9LU-8t-iJ1" customClass="SearchStudentLocationViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="og4-TE-dOl" customClass="MasterView" customModule="OnTheMap" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" id="og4-TE-dOl">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -371,7 +371,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="6cR-AU-UZN">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="6cR-AU-UZN">
                                 <rect key="frame" x="0.0" y="56" width="414" height="662"/>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6sB-rH-yK8">
@@ -414,7 +414,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="TEz-ay-OXy"/>
+        <segue reference="1Wj-Ue-dqv"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="icon_addpin" width="24" height="24"/>

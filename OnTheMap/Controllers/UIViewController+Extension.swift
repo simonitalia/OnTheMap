@@ -151,7 +151,11 @@ extension UIViewController: MKMapViewDelegate {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = true
             pinView!.pinTintColor = .red
-            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+            
+            //only set detail disclosue for pinview annotations on StudentLocationsMapVC
+            if mapView.tag == 0 {
+                pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+            }
         
         } else {
             pinView!.annotation = annotation

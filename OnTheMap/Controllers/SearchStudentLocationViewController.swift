@@ -68,8 +68,7 @@ class SearchStudentLocationViewController: UIViewController {
     
     func configureUI() {
         #if targetEnvironment(simulator)
-        locationTextField.text = "Melbourne, VIC, 3000"
-        urlTextField.text = "https://google.com"
+        urlTextField.text = "https://magicaltomato.com"
         #endif
     }
     

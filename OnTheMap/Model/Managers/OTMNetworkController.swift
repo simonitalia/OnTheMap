@@ -345,7 +345,7 @@ class OTMNetworkController {
         
         let bodyData = studentLocation //set body to studentLocation
         
-        //Perform POST Request
+        //Perform POST || PUT Request
         do {
             request.httpBody = try JSONEncoder().encode(bodyData)
 
@@ -359,7 +359,7 @@ class OTMNetworkController {
         //handle general (eg: network) error
             if let error = error {
                 completion(.failure(.unableToComplete))
-                print("Error! Could not log user out Reason: \(error.localizedDescription)")
+                print("Error! Could not post / update student location: \(error.localizedDescription)")
                 return
             }
 
