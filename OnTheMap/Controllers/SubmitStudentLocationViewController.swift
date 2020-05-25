@@ -22,22 +22,15 @@ class SubmitStudentLocationViewController: UIViewController {
     var mediaURL: String!
     var mapItems: [MKMapItem]!
     
-    lazy var mapItem: MKMapItem? = {
-        if let mapItem = mapItems.first {
-            return mapItem
-        }
-        
-        return nil
+    lazy var mapItem: MKMapItem! = {
+        return mapItems.first
     }()
     
+    //instantiate student location object
     lazy var studentLocation: POSTStudentLocation? = {
-        if let mapItem = mapItem {
-            let first = "Magical", last = "Tomato" //hardcode first and last
-            let object = POSTStudentLocation(firstName: first, lastName: last, mapString: mapString, mediaURL: mediaURL, longitude: mapItem.placemark.coordinate.longitude, latitude: mapItem.placemark.coordinate.latitude)
-            return object
-        }
-        
-        return nil
+        let first = "Magical", last = "Tomato" //hardcode first and last
+        let object = POSTStudentLocation(firstName: first, lastName: last, mapString: mapString, mediaURL: mediaURL, longitude: mapItem.placemark.coordinate.longitude, latitude: mapItem.placemark.coordinate.latitude)
+        return object
     }()
     
     //MARK:- Storyboard Connections
@@ -87,6 +80,7 @@ class SubmitStudentLocationViewController: UIViewController {
         //add annotation to MKMapView
         DispatchQueue.main.async {
             self.mapView.addAnnotation(annotation) //done on main thread so pins appear on view/map load
+            self.mapView.centerCoordinate = annotation.coordinate //move map to coordinates
         }
     }
     

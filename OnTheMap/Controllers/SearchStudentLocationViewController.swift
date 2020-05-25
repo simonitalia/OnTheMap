@@ -126,13 +126,13 @@ class SearchStudentLocationViewController: UIViewController {
     
     //MARK: Navigation Setup
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let mapString = self.locationTextField.text, let mediaURL = urlTextField.text, let mapItems = mapLocationSearchResults else { return }
+        guard let mapString = self.locationTextField.text, let mediaURL = urlTextField.text, !mapLocationSearchResults.isEmpty else { return }
         
         if segue.identifier == SegueIdentifier.segueToSubmitStudentLocationVC {
             let vc = segue.destination as! SubmitStudentLocationViewController
             vc.mapString = mapString
             vc.mediaURL = mediaURL
-            vc.mapItems = mapItems
+            vc.mapItems = mapLocationSearchResults
         }
     }
 }
