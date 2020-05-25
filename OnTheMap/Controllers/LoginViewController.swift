@@ -16,9 +16,11 @@ enum SegueIdentifier {
 
 class LoginViewController: UIViewController {
     
+    //MARK:- Class Properties
     private let udacityWebSignin = "https://auth.udacity.com/sign-in"
     
     
+    //MARK:- Storyboard Connections
     //storyboard outlets
     @IBOutlet var loginStackViews: [UIStackView]!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -40,6 +42,7 @@ class LoginViewController: UIViewController {
     //MARK:- View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureVC()
         configureUI()
     }
     
@@ -58,10 +61,14 @@ class LoginViewController: UIViewController {
     }
     
     
-    private func configureUI() {
-        
-        //set vc/self as delegate of text fields
+    //MARK:- View Setup
+    private func configureVC() {
+        //set delegates
         loginFormTextFields.forEach { $0.delegate = self }
+    }
+    
+    
+    private func configureUI() {
         
         #if targetEnvironment(simulator)
         for textField in loginFormTextFields {
@@ -75,23 +82,17 @@ class LoginViewController: UIViewController {
     }
     
     
+    //MARK:- User session
+    //create session
     private func loggingUserIn(_ flag: Bool) {
         
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            
-            if flag {
-                self.activityIndicator.startAnimating()
-                self.loginStackViews.forEach { $0.isUserInteractionEnabled = false }
-                
-            } else {
-                self.activityIndicator.stopAnimating()
-                self.loginStackViews.forEach { $0.isUserInteractionEnabled = true }
-            }
-        }
+        //update view state and animate
+        updateViewState(for: loginStackViews, to: flag, animate: activityIndicator)
+        
     }
     
     
+    //delete session
     private func performUserLogin() {
         
         //ensure both email and password fields have data
@@ -105,7 +106,7 @@ class LoginViewController: UIViewController {
             return
         }
         
-        //start activity indicator animation
+        //start activity indicator animation and disable view interaction
         loggingUserIn(true)
         
         //set username / password from text fields
@@ -130,7 +131,7 @@ class LoginViewController: UIViewController {
         OTMNetworkController.shared.getUserSession(using: credentials) { [weak self] (result) in
             guard let self = self else { return }
                 
-            //stop activity indicator animation
+            //stop activity indicator animation and enbale view interaction
             self.loggingUserIn(false)
 
             switch result {
@@ -141,7 +142,9 @@ class LoginViewController: UIViewController {
                 
                 //set shared userSession property and perform segue
                 AppDelegate.userSession = sessionResponse
-                self.performSegue(with: SegueIdentifier.segueToTabBarController)
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: SegueIdentifier.segueToTabBarController, sender: self)
+                }
                 
             //if login error, present error alert with specific error reason to user
             case .failure(let error):
@@ -151,6 +154,7 @@ class LoginViewController: UIViewController {
     }
     
     
+    //MARK:- Navigation
     //log out navigation
     @IBAction func unwindToLoginVC(segue: UIStoryboardSegue) {
         //returns user to this VC upon logout from any VC

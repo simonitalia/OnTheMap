@@ -16,8 +16,8 @@ struct POSTStudentLocation {
     
     let firstName = "S"
     let lastName = "Italia"
-    let mapString = "Melbourne, Australia"
+    let mapString: String
     let mediaURL = "https://magicaltomato.com"
-    let longitude = -37.833401
-    let latitude = 144.980331
+    let longitude: Double
+    let latitude: Double
 }

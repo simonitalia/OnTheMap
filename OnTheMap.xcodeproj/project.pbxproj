@@ -27,6 +27,7 @@
 		2A9B2AF224762C94003905EF /* OTMErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A9B2AF124762C94003905EF /* OTMErrorResponse.swift */; };
 		2AB3763F24790C3E00228ABD /* OTMAlertMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB3763E24790C3E00228ABD /* OTMAlertMessage.swift */; };
 		2AB376412479284700228ABD /* DELETESession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB376402479284700228ABD /* DELETESession.swift */; };
+		2ADB6937247B5C9A0038672E /* SubmitStudentLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ADB6936247B5C9A0038672E /* SubmitStudentLocationViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		2A9B2AF124762C94003905EF /* OTMErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTMErrorResponse.swift; sourceTree = "<group>"; };
 		2AB3763E24790C3E00228ABD /* OTMAlertMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTMAlertMessage.swift; sourceTree = "<group>"; };
 		2AB376402479284700228ABD /* DELETESession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DELETESession.swift; sourceTree = "<group>"; };
+		2ADB6936247B5C9A0038672E /* SubmitStudentLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitStudentLocationViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +144,7 @@
 				2A8622BE247772CE007EC715 /* StudentLocationsMapViewController.swift */,
 				2A2294F524776C230081F50C /* StudentLocationsTableViewController.swift */,
 				2A76C7BA247A7B6300376AAC /* FindStudentLocationViewController.swift */,
+				2ADB6936247B5C9A0038672E /* SubmitStudentLocationViewController.swift */,
 				2A9B2AEF24761C20003905EF /* UIViewController+Extension.swift */,
 			);
 			path = Controllers;
@@ -269,6 +272,7 @@
 				2A74D6EB2475396500062429 /* OTMNetworkController.swift in Sources */,
 				2A74D6EF24753A4700062429 /* SessionResponse.swift in Sources */,
 				2A2294F624776C230081F50C /* StudentLocationsTableViewController.swift in Sources */,
+				2ADB6937247B5C9A0038672E /* SubmitStudentLocationViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

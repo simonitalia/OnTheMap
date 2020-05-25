@@ -10,6 +10,11 @@ import UIKit
 
 class StudentLocationsTableViewController: UITableViewController {
     
+    //MARK:- Class Properties
+    private let studentLocationCell = "StudentLocationCell"
+    
+    
+    //MARK:- Storyboard Connections
     //storyboard action outlets
     @IBAction func refreshStudentLocationsButtonTapped(_ sender: Any) {
         performGetStudentLocations {
@@ -36,7 +41,7 @@ class StudentLocationsTableViewController: UITableViewController {
     }
 
 
-    // MARK: - Table view data source
+    //MARK:- TableView Data Source
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -47,8 +52,9 @@ class StudentLocationsTableViewController: UITableViewController {
     }
 
     
+    //MARK:- TableView Delegate
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "StudentLocationCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: studentLocationCell, for: indexPath)
 
         //configure cell
         let row = indexPath.row

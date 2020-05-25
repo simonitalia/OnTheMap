@@ -227,7 +227,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="apx-aj-vsb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="YmL-a7-tf3" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1743" y="1682"/>
+            <point key="canvasLocation" x="1774" y="1682"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Mgf-Ee-Rbk">
@@ -287,7 +287,7 @@
             </objects>
             <point key="canvasLocation" x="562" y="914"/>
         </scene>
-        <!--Find Student Location View Controller-->
+        <!--Add Location-->
         <scene sceneID="zkx-qr-0Vz">
             <objects>
                 <viewController storyboardIdentifier="MasterVC" hidesBottomBarWhenPushed="YES" id="9LU-8t-iJ1" customClass="FindStudentLocationViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
@@ -348,17 +348,67 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="DSb-Jb-HDl"/>
                     </view>
-                    <navigationItem key="navigationItem" id="OmW-hC-pvl"/>
+                    <navigationItem key="navigationItem" title="Add Location" id="OmW-hC-pvl"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="tzb-yE-fRI" id="PKW-13-j1l"/>
                         <outlet property="findLocationButton" destination="B6B-Bd-KSL" id="hW3-SF-iee"/>
+                        <outlet property="findLocationStackView" destination="RaP-j3-DLe" id="J58-Lr-Rqh"/>
                         <outlet property="locationTextField" destination="Vud-uD-b06" id="6ak-JW-kJI"/>
                         <outlet property="urlTextField" destination="fT0-r2-9zR" id="KXe-rt-VAJ"/>
+                        <segue destination="FUp-7h-L5o" kind="show" identifier="FindLocationVCToSubmitLocationVC" id="2jN-Bj-Xos"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tg0-41-XNF" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer enabled="NO" id="Oqo-U9-hIm"/>
             </objects>
             <point key="canvasLocation" x="1158" y="2468"/>
+        </scene>
+        <!--Submit Location-->
+        <scene sceneID="XNk-Ov-st8">
+            <objects>
+                <viewController hidesBottomBarWhenPushed="YES" id="FUp-7h-L5o" customClass="SubmitStudentLocationViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="jeE-zj-CrX">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="6cR-AU-UZN">
+                                <rect key="frame" x="0.0" y="56" width="414" height="662"/>
+                            </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6sB-rH-yK8">
+                                <rect key="frame" x="20" y="738" width="374" height="50"/>
+                                <color key="backgroundColor" red="0.2093498141" green="0.68870566980000003" blue="0.96620899439999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="ilG-1L-LUd"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <state key="normal" title="SUBMIT LOCATION">
+                                    <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="submitLocationButtonTapped:" destination="FUp-7h-L5o" eventType="touchUpInside" id="hbI-tJ-Euf"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="6sB-rH-yK8" firstAttribute="leading" secondItem="Yj1-6T-jQJ" secondAttribute="leading" constant="20" id="5Wt-LQ-wHs"/>
+                            <constraint firstItem="Yj1-6T-jQJ" firstAttribute="trailing" secondItem="6sB-rH-yK8" secondAttribute="trailing" constant="20" id="Bzi-iI-9X0"/>
+                            <constraint firstItem="6cR-AU-UZN" firstAttribute="trailing" secondItem="Yj1-6T-jQJ" secondAttribute="trailing" id="MTl-vh-G81"/>
+                            <constraint firstItem="6sB-rH-yK8" firstAttribute="top" secondItem="6cR-AU-UZN" secondAttribute="bottom" constant="20" id="W4z-ij-xbK"/>
+                            <constraint firstItem="6cR-AU-UZN" firstAttribute="top" secondItem="Yj1-6T-jQJ" secondAttribute="top" id="rQh-hb-liD"/>
+                            <constraint firstItem="Yj1-6T-jQJ" firstAttribute="bottom" secondItem="6sB-rH-yK8" secondAttribute="bottom" constant="20" id="w9m-KP-CO3"/>
+                            <constraint firstItem="6cR-AU-UZN" firstAttribute="leading" secondItem="Yj1-6T-jQJ" secondAttribute="leading" id="xVs-LM-CxD"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Yj1-6T-jQJ"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Submit Location" id="Zgy-Zb-0wW"/>
+                    <connections>
+                        <outlet property="mapView" destination="6cR-AU-UZN" id="kOF-PZ-egi"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Vrp-9O-03b" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2460.8695652173915" y="2467.6339285714284"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

@@ -11,11 +11,24 @@ import MapKit
 
 class FindStudentLocationViewController: UIViewController {
     
+    //MARK:- Class Properties
+    private enum SegueIdentifier {
+        static let segueToSubmitStudentLocationVC = "FindLocationVCToSubmitLocationVC"
+    }
+    
+    
+    //location searche results
+    var mapLocationSearchResults: [MKMapItem]!
+    
+    
+    //MARK:- Storyboard Connections
     //storyboard outlets
     @IBOutlet weak var locationTextField: UITextField!
     @IBOutlet weak var urlTextField: UITextField!
     @IBOutlet weak var findLocationButton: UIButton!
-
+    @IBOutlet weak var findLocationStackView: UIStackView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
 
     //storyboard action outlets
     @IBAction func findLocationButtonTapped(_ sender: Any) {
@@ -26,7 +39,7 @@ class FindStudentLocationViewController: UIViewController {
     //MARK:- View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureView()
+        configureVC()
     }
     
     
@@ -44,13 +57,16 @@ class FindStudentLocationViewController: UIViewController {
     }
     
     
-    //MARK:- View
-    private func configureView() {
+    //MARK:- View Setup
+    private func configureVC() {
+        //set delegates
         locationTextField.delegate = self
         urlTextField.delegate = self
     }
     
     
+    //MARK:- Location Management
+    //find location
     private func performFindLocation() {
         
         //ensure both fields are filled in first
@@ -59,6 +75,8 @@ class FindStudentLocationViewController: UIViewController {
             return
         }
         
+        //start activity view and disable view interaction
+        performingLocationSearch(true)
         
         //perform search for location entered
         let searchRequest = MKLocalSearch.Request()
@@ -66,7 +84,11 @@ class FindStudentLocationViewController: UIViewController {
         let search = MKLocalSearch(request: searchRequest)
         
         //trigger search and handle response
-        search.start { (response, error) in
+        search.start { [weak self] (response, error) in
+            guard let self = self else { return }
+            
+            //stop activity view and enbale view interaction
+            self.performingLocationSearch(false)
             
             //if location search failed, trigger alert
             guard let response = response else {
@@ -75,12 +97,35 @@ class FindStudentLocationViewController: UIViewController {
                 return
             }
 
-            //if location succeeds, triggger segue
-            for _ in response.mapItems {
-                print("Success! Location/s found: \(response.mapItems).")
+            //if location succeeds, set results to local properties
+            print("Success! Location/s found: \(response.mapItems).")
+            self.mapLocationSearchResults = response.mapItems
+            
+            //tirgger segue
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: SegueIdentifier.segueToSubmitStudentLocationVC, sender: self)
             }
         }
+    }
+    
+    
+    private func performingLocationSearch(_ flag: Bool) {
+        
+        //update view state and animate
+        updateViewState(for: [findLocationStackView], to: flag, animate: activityIndicator)
         
     }
     
+    
+    //MARK: Navigation Setup
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let mapString = self.locationTextField.text, let mediaURL = urlTextField.text, let mapItems = mapLocationSearchResults else { return }
+        
+        if segue.identifier == SegueIdentifier.segueToSubmitStudentLocationVC {
+            let vc = segue.destination as! SubmitStudentLocationViewController
+            vc.mapString = mapString
+            vc.mediaURL = mediaURL
+            vc.mapItems = mapItems
+        }
+    }
 }

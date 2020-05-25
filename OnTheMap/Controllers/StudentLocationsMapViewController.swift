@@ -11,6 +11,7 @@ import MapKit
 
 class StudentLocationsMapViewController: UIViewController {
     
+    //MARK:- Storyboard Connections
     //storyboard outlets
     @IBOutlet weak var mapView: MKMapView!
     
@@ -26,16 +27,23 @@ class StudentLocationsMapViewController: UIViewController {
     }
     
     
-    //MARK:- View LifeCycle
+    //MARK:- View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        mapView.delegate = self
+        configureVC()
         configureUI()
     }
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+    }
+    
+    
+    //MARK:- View Setup
+    private func configureVC() {
+        //set delegates
+        mapView.delegate = self
     }
     
     
@@ -47,7 +55,8 @@ class StudentLocationsMapViewController: UIViewController {
         }
     }
     
-
+    
+    //MARK:- Map Annotations
     private func createMapAnnotations() {
         guard !AppDelegate.studentLocations.isEmpty else { return }
         
@@ -71,28 +80,7 @@ class StudentLocationsMapViewController: UIViewController {
 
 
 //MARK:- MKMAPView Delegate
-extension StudentLocationsMapViewController: MKMapViewDelegate {
-    
-    //create a pinView
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
-        let reuseId = "pin"
-        
-        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
-
-        if pinView == nil {
-            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            pinView!.canShowCallout = true
-            pinView!.pinTintColor = .red
-            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-        
-        } else {
-            pinView!.annotation = annotation
-        }
-        
-        return pinView
-    }
-    
+extension StudentLocationsMapViewController {
     
     //open mediaURL when pinView annotaion is tapped
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {

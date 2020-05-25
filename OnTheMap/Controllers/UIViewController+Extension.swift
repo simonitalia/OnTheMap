@@ -8,9 +8,17 @@
 
 import UIKit
 import SafariServices
+import MapKit
+
 
 extension UIViewController {
+    
+    func createFullName(with firstName: String, and lastName: String) -> String {
+        return "\(firstName) \(lastName)"
+    }
      
+    
+    //MARK:- View Controller Presentation
     func presentUserAlert(title: String, message: String) {
         DispatchQueue.main.async {
             let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -26,18 +34,23 @@ extension UIViewController {
     }
     
     
-    func createFullName(with firstName: String, and lastName: String) -> String {
-        return "\(firstName) \(lastName)"
-    }
-    
-    
-    func performSegue(with Identifier: String) {
+    //MARK: Update View/s State
+    func updateViewState(for views: [UIView], to flag: Bool, animate activityIndicator: UIActivityIndicatorView) {
+        
         DispatchQueue.main.async {
-            self.performSegue(withIdentifier: Identifier, sender: self)
+            if flag {
+                activityIndicator.startAnimating()
+                views.forEach { $0.isUserInteractionEnabled = !flag }
+                
+            } else {
+                activityIndicator.stopAnimating()
+                views.forEach { $0.isUserInteractionEnabled = !flag }
+            }
         }
     }
     
     
+    //MARK:- Network Requets
     @objc func performGetStudentLocations(completion: @escaping () -> Void) {
 
         OTMNetworkController.shared.getStudentLocations(with: AppDelegate.itemsLimit, skipItems: AppDelegate.studentLocations.count) { (result) in
@@ -65,7 +78,9 @@ extension UIViewController {
                 print("Success! Deleted sessionID: \(deleteSession.session.id)")
                 
                 //seugue back to login screen
-                self.performSegue(with: SegueIdentifier.segueToLoginVC)
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: SegueIdentifier.segueToLoginVC, sender: nil)
+                }
                 
             case .failure(let error):
                 //present error alart
@@ -74,23 +89,8 @@ extension UIViewController {
         }
     }
     
-}
-
-
-//MARK: Keyboard Notifications
-extension UIViewController {
     
-    
-    //Keyboard notifications
-    func subscribeToKeyboardNotifications() {
-        
-        //subscribe to KB specific notifications
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    
+    //MARK:- Keyboard Observer
     func unsubscribeFromKeyboardNotifications() {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -115,10 +115,48 @@ extension UIViewController {
 }
 
 
-//MARK: Delegates
+//MARK: Notifications
+extension UIViewController {
+    
+    //Keyboard notifications
+    func subscribeToKeyboardNotifications() {
+        
+        //subscribe to KB specific notifications
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+}
+
+
 //MARK:- UITextField Delegate
 extension UIViewController: UITextFieldDelegate {
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
          return textField.resignFirstResponder()
+    }
+}
+
+
+//MARK:- MKMAPView Delegate
+extension UIViewController: MKMapViewDelegate {
+    
+    //create a pinView
+    public func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        let reuseId = "pin"
+        
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.canShowCallout = true
+            pinView!.pinTintColor = .red
+            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        
+        } else {
+            pinView!.annotation = annotation
+        }
+        
+        return pinView
     }
 }
