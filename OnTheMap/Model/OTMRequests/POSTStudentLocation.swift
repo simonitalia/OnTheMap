@@ -20,14 +20,14 @@ struct POSTStudentLocation: Codable {
     
     
     //has an init method to auto generate and set uniqueKey when intialized
-    init(firstName: String, lastName: String ,mapString: String, mediaURL: String, longitude: Double, latitude: Double) {
+    init(mapString: String, longitude: Double, latitude: Double) {
         self.uniqueKey = {
             return UUID().uuidString
         }()
-        self.firstName = firstName
-        self.lastName = lastName
+        self.firstName = "Simon"
+        self.lastName = "Italia"
         self.mapString = mapString
-        self.mediaURL = mediaURL
+        self.mediaURL = "https://magicaltomato.com"
         self.longitude = longitude
         self.latitude = latitude
     }

@@ -40,6 +40,7 @@ class SearchStudentLocationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureVC()
+        configureUI()
     }
     
     
@@ -62,6 +63,14 @@ class SearchStudentLocationViewController: UIViewController {
         //set delegates
         locationTextField.delegate = self
         urlTextField.delegate = self
+    }
+    
+    
+    func configureUI() {
+        #if targetEnvironment(simulator)
+        locationTextField.text = "Melbourne, VIC, 3000"
+        urlTextField.text = "https://google.com"
+        #endif
     }
     
     
@@ -113,7 +122,6 @@ class SearchStudentLocationViewController: UIViewController {
         
         //update view state and animate
         updateViewState(for: [findLocationStackView], to: flag, animate: activityIndicator)
-        
     }
     
     

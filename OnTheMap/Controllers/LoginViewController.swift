@@ -11,7 +11,7 @@ import UIKit
 //properties
 enum SegueIdentifier {
     static let segueToTabBarController = "LoginVCToTabBarController"
-    static let segueToLoginVC = "unwindToLoginVC"
+    static let segueToLoginVC = "UnwindToLoginVC"
 }
 
 class LoginViewController: UIViewController {

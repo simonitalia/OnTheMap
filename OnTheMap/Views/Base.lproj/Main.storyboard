@@ -150,7 +150,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="bfl-ar-F8W" id="XEd-aY-qcr"/>
-                        <segue destination="D0j-bD-tIP" kind="unwind" identifier="unwindToLoginVC" unwindAction="unwindToLoginVCWithSegue:" id="EX0-y7-HQF"/>
+                        <segue destination="D0j-bD-tIP" kind="unwind" identifier="UnwindToLoginVC" unwindAction="unwindToLoginVCWithSegue:" id="EX0-y7-HQF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fbe-ED-wqg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -221,7 +221,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
-                        <segue destination="YmL-a7-tf3" kind="unwind" identifier="unwindToLoginVC" unwindAction="unwindToLoginVCWithSegue:" id="1sQ-Jp-zAm"/>
+                        <segue destination="YmL-a7-tf3" kind="unwind" identifier="UnwindToLoginVC" unwindAction="unwindToLoginVCWithSegue:" id="1sQ-Jp-zAm"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="apx-aj-vsb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -404,9 +404,11 @@
                     <navigationItem key="navigationItem" title="Add Location" id="Zgy-Zb-0wW"/>
                     <connections>
                         <outlet property="mapView" destination="6cR-AU-UZN" id="kOF-PZ-egi"/>
+                        <segue destination="u7G-xU-Hgb" kind="unwind" identifier="UnwindToStudentLocationsMapVC" unwindAction="unwindToStudentLocationsMapVCWithSegue:" id="21P-e6-ps2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vrp-9O-03b" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="u7G-xU-Hgb" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2460.8695652173915" y="2467.6339285714284"/>
         </scene>

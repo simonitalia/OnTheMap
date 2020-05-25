@@ -11,6 +11,7 @@ import MapKit
 
 class StudentLocationsMapViewController: UIViewController {
     
+    
     //MARK:- Storyboard Connections
     //storyboard outlets
     @IBOutlet weak var mapView: MKMapView!
@@ -60,6 +61,7 @@ class StudentLocationsMapViewController: UIViewController {
     private func createMapAnnotations() {
         guard !AppDelegate.studentLocations.isEmpty else { return }
         
+
         AppDelegate.studentLocations.forEach {
             let annotation = MKPointAnnotation()
             
@@ -73,9 +75,21 @@ class StudentLocationsMapViewController: UIViewController {
             annotation.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
             
             //add annotation to MKMapView
-            mapView.addAnnotation(annotation)
+            DispatchQueue.main.async {
+                self.mapView.addAnnotation(annotation) //done on main thread so pins appear on view/map load
+            }
         }
     }
+    
+    
+    //MARK:- Navigation
+    //log out navigation
+    @IBAction func unwindToStudentLocationsMapVC(segue: UIStoryboardSegue) {
+        //returns user to this VC upon submission of student location
+        
+    }
+    
+    
 }
 
 

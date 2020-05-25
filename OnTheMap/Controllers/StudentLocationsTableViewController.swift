@@ -39,7 +39,7 @@ class StudentLocationsTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
-
+    
 
     //MARK:- TableView Data Source
     override func numberOfSections(in tableView: UITableView) -> Int {
