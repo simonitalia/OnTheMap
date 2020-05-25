@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class FindStudentLocationViewController: UIViewController {
+class SearchStudentLocationViewController: UIViewController {
     
     //MARK:- Class Properties
     private enum SegueIdentifier {

@@ -137,11 +137,11 @@ class LoginViewController: UIViewController {
             switch result {
                 
             //if login success, segue to next vc / screen
-            case.success(let sessionResponse):
-                print("Success! UserSession created with session ID: \(sessionResponse.session.id)")
+            case.success(let userSession):
+                print("Success! UserSession created with session ID: \(userSession.session.id)")
                 
                 //set shared userSession property and perform segue
-                AppDelegate.userSession = sessionResponse
+                AppDelegate.userSession = userSession
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: SegueIdentifier.segueToTabBarController, sender: self)
                 }

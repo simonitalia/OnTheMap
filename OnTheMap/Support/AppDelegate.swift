@@ -13,11 +13,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     //MARK:- Shared Global properties
     //user session mananagmment
-    static var userSession: SessionResponse?
+    static var userSession: UserSession?
     
     //fetched student locations
     static var studentLocations = [StudentInformation]()
     static var itemsLimit = 100
+    
+    //Posted student ocation
+    static var studentLocation: StudentLocation!
 
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

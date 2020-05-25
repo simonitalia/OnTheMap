@@ -16,6 +16,8 @@ enum OTMErrorResponse: String, Error {
     case invalidCredentials = "We had a problem logging you in.\nPleasse check your login details and try again." //403 client error
     
     //Global Error cases
+    case inavlidAPIEndpointURL = "Invalid API endpoint."
+    
     //network errors
     case invalidResponse = "Invalid response from server.\nPlease try again." //400, 500 etc server error
     case unableToComplete = "Unable to complete request.\nPlease check internet connection."

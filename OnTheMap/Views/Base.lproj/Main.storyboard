@@ -290,7 +290,7 @@
         <!--Add Location-->
         <scene sceneID="zkx-qr-0Vz">
             <objects>
-                <viewController storyboardIdentifier="MasterVC" hidesBottomBarWhenPushed="YES" id="9LU-8t-iJ1" customClass="FindStudentLocationViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MasterVC" hidesBottomBarWhenPushed="YES" id="9LU-8t-iJ1" customClass="SearchStudentLocationViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="og4-TE-dOl" customClass="MasterView" customModule="OnTheMap" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -363,7 +363,7 @@
             </objects>
             <point key="canvasLocation" x="1158" y="2468"/>
         </scene>
-        <!--Submit Location-->
+        <!--Add Location-->
         <scene sceneID="XNk-Ov-st8">
             <objects>
                 <viewController hidesBottomBarWhenPushed="YES" id="FUp-7h-L5o" customClass="SubmitStudentLocationViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
@@ -401,7 +401,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Yj1-6T-jQJ"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Submit Location" id="Zgy-Zb-0wW"/>
+                    <navigationItem key="navigationItem" title="Add Location" id="Zgy-Zb-0wW"/>
                     <connections>
                         <outlet property="mapView" destination="6cR-AU-UZN" id="kOF-PZ-egi"/>
                     </connections>

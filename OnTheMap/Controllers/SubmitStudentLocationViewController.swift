@@ -46,13 +46,14 @@ class SubmitStudentLocationViewController: UIViewController {
     }
     
     
-    
-    
-    
     private func configureUI() {
         print("mapString object received: \(mapString ?? "no mapString")")
         print("mapItems object received: \(String(describing: mapItems))")
         print("mediaURL object received: \(mediaURL ?? "no mediaURL")")
     }
+    
+    
+    
+    
 
 }
