@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import MapKit
 
-class SubmitStudentLocationViewController: UIViewController {
+class FindStudentLocationViewController: UIViewController {
     
     //storyboard outlets
     @IBOutlet weak var locationTextField: UITextField!
@@ -56,6 +57,28 @@ class SubmitStudentLocationViewController: UIViewController {
         guard locationTextField.hasText && urlTextField.hasText else {
             self.presentUserAlert(title: "Form Incomplete!", message: OTMAlertMessage.incompleteForm)
             return
+        }
+        
+        
+        //perform search for location entered
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = locationTextField.text
+        let search = MKLocalSearch(request: searchRequest)
+        
+        //trigger search and handle response
+        search.start { (response, error) in
+            
+            //if location search failed, trigger alert
+            guard let response = response else {
+                self.presentUserAlert(title: "Location Not Found", message: OTMAlertMessage.locationNotFound)
+                print("Error: \(error?.localizedDescription ?? "Unknown error").")// for debugging
+                return
+            }
+
+            //if location succeeds, triggger segue
+            for _ in response.mapItems {
+                print("Success! Location/s found: \(response.mapItems).")
+            }
         }
         
     }

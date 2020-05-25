@@ -287,10 +287,10 @@
             </objects>
             <point key="canvasLocation" x="562" y="914"/>
         </scene>
-        <!--Submit Student Location View Controller-->
+        <!--Find Student Location View Controller-->
         <scene sceneID="zkx-qr-0Vz">
             <objects>
-                <viewController storyboardIdentifier="MasterVC" hidesBottomBarWhenPushed="YES" id="9LU-8t-iJ1" customClass="SubmitStudentLocationViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MasterVC" hidesBottomBarWhenPushed="YES" id="9LU-8t-iJ1" customClass="FindStudentLocationViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="og4-TE-dOl" customClass="MasterView" customModule="OnTheMap" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -358,7 +358,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tg0-41-XNF" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer enabled="NO" id="Oqo-U9-hIm"/>
             </objects>
-            <point key="canvasLocation" x="1128" y="2492"/>
+            <point key="canvasLocation" x="1158" y="2468"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
