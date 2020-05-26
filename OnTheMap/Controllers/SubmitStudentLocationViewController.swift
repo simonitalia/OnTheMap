@@ -11,10 +11,6 @@ import MapKit
 
 class SubmitStudentLocationViewController: UIViewController {
     
-    //MARK: Class Properties
-    enum SegueIdentifier {
-        static let segueToStudentLocationsMapVC = "UnwindToStudentLocationsMapVC"
-    }
     
     //MARK:- Class Properties
     //received from FindStudentLocationVC
@@ -28,7 +24,7 @@ class SubmitStudentLocationViewController: UIViewController {
     
     //instantiate student location object
     lazy private var studentLocation: POSTStudentLocation? = {
-        let first = "Udacity", last = "Student" //hardcode first and last
+        let first = "John", last = "Doe" //hardcode first and last
         let object = POSTStudentLocation(firstName: first, lastName: last, mapString: mapString, mediaURL: mediaURL, longitude: mapItem.placemark.coordinate.longitude, latitude: mapItem.placemark.coordinate.latitude)
         return object
     }()
@@ -47,8 +43,6 @@ class SubmitStudentLocationViewController: UIViewController {
     @IBOutlet weak var submitLocationButton: UIButton!
     
     
-    
-    
     //storyboard action outlest
     @IBAction func submitLocationButtonTapped(_ sender: Any) {
         
@@ -56,7 +50,7 @@ class SubmitStudentLocationViewController: UIViewController {
         //if student update exists, present confirmaton alert
         if let _ = objectID {
             presentUpdateLocationConfirmationAlert()
-        
+
         //process student update
         } else {
            submitStudentLocation(httpMethod: OTMNetworkController.httpMethod.post)
@@ -147,9 +141,9 @@ class SubmitStudentLocationViewController: UIViewController {
                     AppDelegate.studentLocation = (studentLocation: studentLocation, updatedAt: studentLocation.createdAt)
                     print("Successs! Created new Student Location object: \(String(describing: AppDelegate.studentLocation))")
                     
-                    //perform segue back to StudentLocationsMapVC
+                    //dismiss VC
                     DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: SegueIdentifier.segueToStudentLocationsMapVC, sender: nil)
+                        self.dismiss(animated: true, completion: nil)
                     }
                     
                 case .failure(let error):
@@ -173,9 +167,9 @@ class SubmitStudentLocationViewController: UIViewController {
                     AppDelegate.studentLocation?.updatedAt = studentLocationUpdate.updatedAt
                     print("Successs! Updated Student Location object: \(String(describing: AppDelegate.studentLocation))")
                     
-                    //perform segue back to StudentLocationsMapVC
+                    //dismiss VC
                     DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: SegueIdentifier.segueToStudentLocationsMapVC, sender: nil)
+                        self.dismiss(animated: true, completion: nil)
                     }
                     
                 case .failure(let error):

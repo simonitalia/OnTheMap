@@ -13,7 +13,7 @@ class SearchStudentLocationViewController: UIViewController {
     
     //MARK:- Class Properties
     private enum SegueIdentifier {
-        static let segueToSubmitStudentLocationVC = "FindLocationVCToSubmitLocationVC"
+        static let segueToSubmitStudentLocationVC = "SearchLocationVCToSubmitLocationVC"
     }
     
     
@@ -36,6 +36,11 @@ class SearchStudentLocationViewController: UIViewController {
     }
     
     
+    @IBAction func cancelButtonTapped(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    
     //MARK:- View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +51,7 @@ class SearchStudentLocationViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        //subscriobe to notifications
+        //subscribe to notifications
         subscribeToKeyboardNotifications()
     }
     
@@ -56,11 +61,7 @@ class SearchStudentLocationViewController: UIViewController {
         self.view.endEditing(true) //resign first responder to dismiss kb
         unsubscribeFromKeyboardNotifications()
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
-    
+
     
     //MARK:- View Setup
     private func configureVC() {

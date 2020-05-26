@@ -11,6 +11,11 @@ import MapKit
 
 class StudentLocationsMapViewController: UIViewController {
     
+    //MARK:- Class Properties
+    enum SegueIdentifier {
+        static let segueToSearchStudentLocationVC = "LocationsMapVCToSearchLocationVC"
+    }
+    
     
     //MARK:- Storyboard Connections
     //storyboard outlets
@@ -34,13 +39,7 @@ class StudentLocationsMapViewController: UIViewController {
         configureVC()
         configureUI()
     }
-    
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    
+
     
     //MARK:- View Setup
     private func configureVC() {
@@ -79,13 +78,6 @@ class StudentLocationsMapViewController: UIViewController {
                 self.mapView.addAnnotation(annotation) //done on main thread so pins appear on view/map load
             }
         }
-    }
-    
-    
-    //MARK:- Navigation
-    //log out navigation
-    @IBAction func unwindToStudentLocationsMapVC(segue: UIStoryboardSegue) {
-        //returns user to this VC upon submission of student location
     }
 }
 

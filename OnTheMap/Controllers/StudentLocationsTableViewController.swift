@@ -10,7 +10,12 @@ import UIKit
 
 class StudentLocationsTableViewController: UITableViewController {
     
+
     //MARK:- Class Properties
+    enum SegueIdentifier {
+        static let segueToSearchStudentLocationVC = "LocationsTableVCToSearchLocationVC"
+    }
+    
     private let studentLocationCell = "StudentLocationCell"
     
     
@@ -24,6 +29,7 @@ class StudentLocationsTableViewController: UITableViewController {
         }
     }
     
+    
     @IBAction func logoutButtonTapped(_ sender: Any) {
         performUserLogOut()
     }
@@ -32,6 +38,7 @@ class StudentLocationsTableViewController: UITableViewController {
     //MARK:- View LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        //no need to fetch student data on viewDidLoad since data laready fetched by StudentLocationsMapViewController
     }
     
     
