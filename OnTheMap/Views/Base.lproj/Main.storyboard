@@ -136,7 +136,7 @@
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem image="icon_addpin" id="r2K-xf-w21">
+                            <barButtonItem image="icon_pin" id="r2K-xf-w21">
                                 <connections>
                                     <segue destination="9LU-8t-iJ1" kind="show" id="1Wj-Ue-dqv"/>
                                 </connections>
@@ -208,7 +208,7 @@
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
-                            <barButtonItem image="icon_addpin" id="UFx-AE-I16">
+                            <barButtonItem image="icon_pin" id="UFx-AE-I16">
                                 <connections>
                                     <segue destination="9LU-8t-iJ1" kind="show" id="TEz-ay-OXy"/>
                                 </connections>
@@ -414,10 +414,9 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="1Wj-Ue-dqv"/>
+        <segue reference="TEz-ay-OXy"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="icon_addpin" width="24" height="24"/>
         <image name="icon_listview-deselected" width="75" height="50"/>
         <image name="icon_mapview-deselected" width="75" height="50"/>
         <image name="icon_pin" width="24" height="24"/>
