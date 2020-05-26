@@ -43,6 +43,10 @@ class SubmitStudentLocationViewController: UIViewController {
     //MARK:- Storyboard Connections
     //storyboard outlets
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var submitLocationButton: UIButton!
+    
+    
     
     
     //storyboard action outlest
@@ -114,13 +118,27 @@ class SubmitStudentLocationViewController: UIViewController {
     }
     
     
+    private func submittingStudentLocation(_ flag: Bool) {
+        
+        //update view state and animate
+        updateViewState(for: [mapView, submitLocationButton], to: flag, animate: activityIndicator)
+    }
+    
+    
     private func submitStudentLocation(httpMethod: OTMNetworkController.httpMethod) {
         guard let postObject = self.studentLocation else { return }
+        
+        //start activity view and disable view interaction
+        submittingStudentLocation(true)
         
         //post new and create new student location object
         switch httpMethod {
         case .post:
-            OTMNetworkController.shared.postStudentLocation(with: postObject) { (result) in
+            OTMNetworkController.shared.postStudentLocation(with: postObject) { [weak self] (result) in
+                guard let self = self else {return}
+                
+                //stop activity view and renable view interaction
+                self.submittingStudentLocation(false)
                         
                 switch result {
                 case .success(let studentLocation):

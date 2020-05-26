@@ -388,13 +388,18 @@
                                     <action selector="submitLocationButtonTapped:" destination="FUp-7h-L5o" eventType="touchUpInside" id="hbI-tJ-Euf"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="Fqe-Ox-q4S">
+                                <rect key="frame" x="188.5" y="413.5" width="37" height="37"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="Fqe-Ox-q4S" firstAttribute="centerY" secondItem="Yj1-6T-jQJ" secondAttribute="centerY" id="2ig-e3-rf3"/>
                             <constraint firstItem="6sB-rH-yK8" firstAttribute="leading" secondItem="Yj1-6T-jQJ" secondAttribute="leading" constant="20" id="5Wt-LQ-wHs"/>
                             <constraint firstItem="Yj1-6T-jQJ" firstAttribute="trailing" secondItem="6sB-rH-yK8" secondAttribute="trailing" constant="20" id="Bzi-iI-9X0"/>
                             <constraint firstItem="6cR-AU-UZN" firstAttribute="trailing" secondItem="Yj1-6T-jQJ" secondAttribute="trailing" id="MTl-vh-G81"/>
                             <constraint firstItem="6sB-rH-yK8" firstAttribute="top" secondItem="6cR-AU-UZN" secondAttribute="bottom" constant="20" id="W4z-ij-xbK"/>
+                            <constraint firstItem="Fqe-Ox-q4S" firstAttribute="centerX" secondItem="Yj1-6T-jQJ" secondAttribute="centerX" id="YC1-v9-UEV"/>
                             <constraint firstItem="6cR-AU-UZN" firstAttribute="top" secondItem="Yj1-6T-jQJ" secondAttribute="top" id="rQh-hb-liD"/>
                             <constraint firstItem="Yj1-6T-jQJ" firstAttribute="bottom" secondItem="6sB-rH-yK8" secondAttribute="bottom" constant="20" id="w9m-KP-CO3"/>
                             <constraint firstItem="6cR-AU-UZN" firstAttribute="leading" secondItem="Yj1-6T-jQJ" secondAttribute="leading" id="xVs-LM-CxD"/>
@@ -403,7 +408,9 @@
                     </view>
                     <navigationItem key="navigationItem" title="Add Location" id="Zgy-Zb-0wW"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="Fqe-Ox-q4S" id="la6-6u-XCq"/>
                         <outlet property="mapView" destination="6cR-AU-UZN" id="kOF-PZ-egi"/>
+                        <outlet property="submitLocationButton" destination="6sB-rH-yK8" id="0w0-it-hfN"/>
                         <segue destination="u7G-xU-Hgb" kind="unwind" identifier="UnwindToStudentLocationsMapVC" unwindAction="unwindToStudentLocationsMapVCWithSegue:" id="21P-e6-ps2"/>
                     </connections>
                 </viewController>
