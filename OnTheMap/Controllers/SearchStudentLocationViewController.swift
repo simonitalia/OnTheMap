@@ -53,7 +53,12 @@ class SearchStudentLocationViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        self.view.endEditing(true) //resign first responder to dismiss kb
         unsubscribeFromKeyboardNotifications()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
     }
     
     
