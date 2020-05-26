@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static var itemsLimit = 100
     
     //Posted student location response
-     static var studentLocation: StudentLocation?
+    static var studentLocation: (studentLocation: StudentLocation, updatedAt: String)?
 
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

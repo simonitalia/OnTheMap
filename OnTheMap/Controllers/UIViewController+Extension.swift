@@ -84,7 +84,7 @@ extension UIViewController {
                 
             case .failure(let error):
                 //present error alart
-                print("Error! Failed to log user out. Reason: \(error.rawValue)")
+                self.presentUserAlert(title: "Logout Error!", message: error.rawValue)
             }
         }
     }

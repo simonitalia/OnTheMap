@@ -40,7 +40,7 @@ class SubmitStudentLocationViewController: UIViewController {
     
     //storyboard action outlest
     @IBAction func submitLocationButtonTapped(_ sender: Any) {
-//        submitStudentLocation()
+        submitStudentLocation()
     }
     
     
@@ -85,53 +85,65 @@ class SubmitStudentLocationViewController: UIViewController {
     }
     
     
-
+    private func presentUpdateLocationConfirmationAlert() {
+        guard let postObject = self.studentLocation else { return }
+        
+        
+        
+        
+        
+    }
+    
+    
+    
     private func submitStudentLocation() {
         guard let postObject = self.studentLocation else { return }
-     
+        
         //update existing student location objectID
-        if let objectID = AppDelegate.studentLocation?.objectId {
-            OTMNetworkController.shared.submitStudentLocation(as: .put, with: postObject, objectID: objectID) { (result) in
+        if let objectID = AppDelegate.studentLocation?.studentLocation.objectId {
+         
+            OTMNetworkController.shared.putStudentLocation(with: postObject, objectID: objectID) { (result) in
                 
                 switch result {
-                case .success(let updatedAt):
-                    print("Successs! Updated Student Location with new location.")
+                case .success(let studentLocationUpdate):
                     
-                    //update student location createdAt with updatedAt response
-//                    AppDelegate.studentLocation?.createdAt = updatedAt
+                    //update student location with updatedAt
+                    AppDelegate.studentLocation?.updatedAt = studentLocationUpdate.updatedAt
+                    print("Successs! Updated Student Location object: \(String(describing: AppDelegate.studentLocation))")
                     
                     //perform segue back to StudentLocationsMapVC
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: SegueIdentifier.segueToStudentLocationsMapVC, sender: nil)
                     }
                     
-                case .failure:
-                    print("Error! Failed to update Student Location with new location.")
+                case .failure(let error):
+                    
                     //present error alert
+                    self.presentUserAlert(title: "Failed to Update Location!", message: error.rawValue)
                     return
                 }
-    
             }
          
         //post new and create new student location object
         } else {
-            OTMNetworkController.shared.submitStudentLocation(as: .post, with: postObject, objectID: nil) { (result) in
+            OTMNetworkController.shared.postStudentLocation(with: postObject) { (result) in
                         
                 switch result {
                 case .success(let studentLocation):
-                    print("Successs! Created new Student Location.")
                     
                     //set student location property
-                    AppDelegate.studentLocation = studentLocation
+                    AppDelegate.studentLocation = (studentLocation: studentLocation, updatedAt: studentLocation.createdAt)
+                    print("Successs! Created new Student Location object: \(String(describing: AppDelegate.studentLocation))")
                     
                     //perform segue back to StudentLocationsMapVC
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: SegueIdentifier.segueToStudentLocationsMapVC, sender: nil)
                     }
                     
-                case .failure:
-                    print("Error! Failed to create new Student Location")
+                case .failure(let error):
+                    
                     //present error alert
+                    self.presentUserAlert(title: "Failed to Submit Location!", message: error.rawValue)
                     return
                 }
             }

@@ -13,7 +13,7 @@ class OTMNetworkController {
     //accessible class properties
     static var shared = OTMNetworkController()
     
-    enum httpMethod: String {
+    private enum httpMethod: String {
         case post = "POST"
         case delete = "DELETE"
         case put = "PUT"
@@ -93,7 +93,6 @@ class OTMNetworkController {
             case .studentLocationUpdate(let objectID):
                 return self.getURLComponents(appendingWith: URLPath.studentLocation+"/\(objectID)").url
             }
-            
         }
         
         //construct base URL from url components
@@ -136,9 +135,8 @@ class OTMNetworkController {
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             
             //handle general (eg: network) error
-            if let error = error {
+            if let _ = error {
                 completion(.failure(.unableToComplete))
-                print("POST Error! Could not create user session. Reason: \(error.localizedDescription)")
                 return
             }
            
@@ -222,14 +220,13 @@ class OTMNetworkController {
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             
             //handle general (eg: network) error
-            if let error = error {
+            if let _ = error {
                 completion(.failure(.unableToComplete))
-                print("Error! Could not log user out Reason: \(error.localizedDescription)")
                 return
             }
 
             //bad http response
-            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
                 completion(.failure(.invalidResponse))
                 return
             }
@@ -271,14 +268,13 @@ class OTMNetworkController {
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             
             //handle general (eg: network) error
-            if let error = error {
+            if let _ = error {
                 completion(.failure(.unableToComplete))
-                print("GET Error! Could not fetch Student Locations. Reason: \(error.localizedDescription)")
                 return
             }
             
             //bad http response
-            guard let response = response as? HTTPURLResponse, response.statusCode == 200  else {
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200  else {
                 completion(.failure(.invalidResponse))
                 return
             }
@@ -302,52 +298,44 @@ class OTMNetworkController {
         
         task.resume()
     }
-
     
-    //submit student locations
-    func submitStudentLocation(as httpMethod: httpMethod, with studentLocation: POSTStudentLocation, objectID: String?, completion: @escaping (Result <StudentLocation, OTMErrorResponse>) -> Void) {
+    
+    //create new student location
+    func postStudentLocation(with studentLocation: POSTStudentLocation, completion: @escaping (Result<StudentLocation, OTMErrorResponse>) -> Void) {
         
-        var requestURL: URLRequest? {
-        
-            //generat url endpoint based on submit type
-            switch httpMethod {
-            case .post:
-                
-                //safely generate url endpoint
-                if let url = Endpoint.studentLocation.url {
-                     return URLRequest(url: url)
-                }
-        
-            case .put:
-                //make sure a student location object exists
-                guard let objectId = objectID else { return nil }
-                
-                //safely generate url endpoint
-                if let url = Endpoint.studentLocationUpdate(objectID: objectId).url {
-                    return URLRequest(url: url)
-                }
-          
-            default:
-                print("Error! httpMethod for submitting Student Location is unknown")
-            }
-            
-            return nil // in cases url cannot be generated
-        }
-        
-        //ensure valid request url
-        guard var request = requestURL else {
+        guard let url = Endpoint.studentLocation.url else {
             print(OTMErrorResponse.inavlidAPIEndpointURL)
             return
         }
         
+        _ = taskForPOSTRequest(url: url, body: studentLocation, httpMethod: httpMethod.post.rawValue, responseType: StudentLocation.self) { (result) in completion(result) }
+    }
+    
+    
+    //update existing student location object
+    func putStudentLocation(with studentLocation: POSTStudentLocation, objectID: String, completion: @escaping (Result<StudentLocationUpdate, OTMErrorResponse>) -> Void) {
+        
+        guard let url = Endpoint.studentLocationUpdate(objectID: objectID).url else {
+            print(OTMErrorResponse.inavlidAPIEndpointURL)
+            return
+        }
+        
+        //perform dataTask
+        _ = taskForPOSTRequest(url: url, body: studentLocation, httpMethod: httpMethod.put.rawValue, responseType: StudentLocationUpdate.self) { (result) in completion(result) }
+    }
+    
+
+    //MARK: Generic Methods
+    //dataTask for POST requests
+    private func taskForPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, body: RequestType, httpMethod: String, responseType: ResponseType.Type, completion: @escaping (Result <ResponseType, OTMErrorResponse>) -> Void) -> URLSessionDataTask {
+        
+        var request = URLRequest(url: url)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = httpMethod.rawValue
+        request.httpMethod = httpMethod
         
-        let bodyData = studentLocation //set body to studentLocation
-        
-        //Perform POST || PUT Request
+        //Perform POST Request
         do {
-            request.httpBody = try JSONEncoder().encode(bodyData)
+            request.httpBody = try JSONEncoder().encode(body)
 
         //handle object JSON encoding error
         } catch {
@@ -359,12 +347,12 @@ class OTMNetworkController {
         //handle general (eg: network) error
             if let error = error {
                 completion(.failure(.unableToComplete))
-                print("Error! Could not post / update student location: \(error.localizedDescription)")
+                print("Error! Could not complete request. Reason: \(error.localizedDescription)")
                 return
             }
 
             //bad http response
-            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
                 completion(.failure(.invalidResponse))
                 return
             }
@@ -379,47 +367,7 @@ class OTMNetworkController {
             let decoder = JSONDecoder()
             
             do {
-                let studentLocation = try decoder.decode(StudentLocation.self, from: data)
-                completion(.success(studentLocation))
-                
-            } catch {
-                completion(.failure(.unableToParseJSON))
-            }
-        }
-        
-        task.resume()
-    }
-    
-    
-    //generic method for task object
-    private func taskForRequest<Response: Decodable>(_ request: URLRequest, completion: @escaping (Result <Response, OTMErrorResponse>) -> Void) -> URLSessionDataTask {
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-             
-        //handle general (eg: network) error
-            if let error = error {
-                completion(.failure(.unableToComplete))
-                print("Error! Could not log user out Reason: \(error.localizedDescription)")
-                return
-            }
-
-            //bad http response
-            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                completion(.failure(.invalidResponse))
-                return
-            }
-            
-            //handle no data returned
-            guard let data = data else {
-                completion(.failure(.invalidData))
-                return
-            }
-          
-            //decode JSON Data Response object
-            let decoder = JSONDecoder()
-            
-            do {
-                let response = try decoder.decode(Response.self, from: data)
+                let response = try decoder.decode(ResponseType.self, from: data)
                 completion(.success(response))
                 
             } catch {

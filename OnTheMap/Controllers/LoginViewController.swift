@@ -97,7 +97,6 @@ class LoginViewController: UIViewController {
         
         //ensure both email and password fields have data
         guard loginFormTextFields.count == 2 else {
-            print("Something went wrong! There should be 2 loginFormTextField objects.")
             return
         }
         

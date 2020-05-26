@@ -100,8 +100,7 @@ class SearchStudentLocationViewController: UIViewController {
             
             //if location search failed, trigger alert
             guard let response = response else {
-                self.presentUserAlert(title: "Location Not Found", message: OTMAlertMessage.locationNotFound)
-                print("Error: \(error?.localizedDescription ?? "Unknown error").")// for debugging
+                self.presentUserAlert(title: "Location Not Found!", message: error?.localizedDescription ?? "Unknown Error." + " Please try again.")
                 return
             }
 
