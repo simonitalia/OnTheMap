@@ -8,7 +8,7 @@
 
 import Foundation
 
-//dummy data set as default
+//model for POST and PUT Student Location
 struct POSTStudentLocation: Codable {
     let uniqueKey: String
     let firstName: String

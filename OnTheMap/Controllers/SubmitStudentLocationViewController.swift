@@ -28,7 +28,7 @@ class SubmitStudentLocationViewController: UIViewController {
     
     //instantiate student location object
     lazy private var studentLocation: POSTStudentLocation? = {
-        let first = "Magical", last = "Tomato" //hardcode first and last
+        let first = "Udacity", last = "Student" //hardcode first and last
         let object = POSTStudentLocation(firstName: first, lastName: last, mapString: mapString, mediaURL: mediaURL, longitude: mapItem.placemark.coordinate.longitude, latitude: mapItem.placemark.coordinate.latitude)
         return object
     }()

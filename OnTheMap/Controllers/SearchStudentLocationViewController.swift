@@ -40,7 +40,6 @@ class SearchStudentLocationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureVC()
-        configureUI()
     }
     
     
@@ -63,13 +62,6 @@ class SearchStudentLocationViewController: UIViewController {
         //set delegates
         locationTextField.delegate = self
         urlTextField.delegate = self
-    }
-    
-    
-    func configureUI() {
-        #if targetEnvironment(simulator)
-        urlTextField.text = "https://magicaltomato.com"
-        #endif
     }
     
     

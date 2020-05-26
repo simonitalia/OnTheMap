@@ -43,7 +43,6 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureVC()
-        configureUI()
     }
     
     
@@ -65,20 +64,6 @@ class LoginViewController: UIViewController {
     private func configureVC() {
         //set delegates
         loginFormTextFields.forEach { $0.delegate = self }
-    }
-    
-    
-    private func configureUI() {
-        
-        #if targetEnvironment(simulator)
-        for textField in loginFormTextFields {
-            if textField.tag == 0 {
-                textField.text = "simonitalia@gmail.com"
-            } else {
-                textField.text = "lio4!kBX20o#Xh49"
-            }
-        }
-        #endif
     }
     
     

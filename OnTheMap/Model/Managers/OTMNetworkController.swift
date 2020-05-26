@@ -19,7 +19,6 @@ class OTMNetworkController {
         case put = "PUT"
     }
     
-    
     //private class propeeties
     private enum Endpoint {
         
