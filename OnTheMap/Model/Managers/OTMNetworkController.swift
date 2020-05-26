@@ -13,7 +13,7 @@ class OTMNetworkController {
     //accessible class properties
     static var shared = OTMNetworkController()
     
-    private enum httpMethod: String {
+    enum httpMethod: String {
         case post = "POST"
         case delete = "DELETE"
         case put = "PUT"

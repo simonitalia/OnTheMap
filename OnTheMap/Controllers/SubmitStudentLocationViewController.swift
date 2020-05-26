@@ -22,16 +22,23 @@ class SubmitStudentLocationViewController: UIViewController {
     var mediaURL: String!
     var mapItems: [MKMapItem]!
     
-    lazy var mapItem: MKMapItem! = {
+    lazy private var mapItem: MKMapItem! = {
         return mapItems.first
     }()
     
     //instantiate student location object
-    lazy var studentLocation: POSTStudentLocation? = {
+    lazy private var studentLocation: POSTStudentLocation? = {
         let first = "Magical", last = "Tomato" //hardcode first and last
         let object = POSTStudentLocation(firstName: first, lastName: last, mapString: mapString, mediaURL: mediaURL, longitude: mapItem.placemark.coordinate.longitude, latitude: mapItem.placemark.coordinate.latitude)
         return object
     }()
+    
+    
+    //location objectID
+    private var objectID: String? {
+        return AppDelegate.studentLocation?.studentLocation.objectId
+    }
+    
     
     //MARK:- Storyboard Connections
     //storyboard outlets
@@ -40,7 +47,16 @@ class SubmitStudentLocationViewController: UIViewController {
     
     //storyboard action outlest
     @IBAction func submitLocationButtonTapped(_ sender: Any) {
-        submitStudentLocation()
+        
+        //trigger submit location
+        //if student update exists, present confirmaton alert
+        if let _ = objectID {
+            presentUpdateLocationConfirmationAlert()
+        
+        //process student update
+        } else {
+           submitStudentLocation(httpMethod: OTMNetworkController.httpMethod.post)
+        }
     }
     
     
@@ -85,47 +101,25 @@ class SubmitStudentLocationViewController: UIViewController {
     }
     
     
+    //update location confirmation alert
     private func presentUpdateLocationConfirmationAlert() {
-        guard let postObject = self.studentLocation else { return }
+        let ac = UIAlertController(title: "Confirm Location Update!", message: OTMAlertMessage.updateLocationConfirmation, preferredStyle: .alert)
+            
+        ac.addAction(UIAlertAction(title: "Cancel", style: .default))
+        ac.addAction(UIAlertAction(title: "Update", style: .default, handler: {
+            action in self.submitStudentLocation(httpMethod: OTMNetworkController.httpMethod.put)
+        }))
         
-        
-        
-        
-        
+        present(ac, animated: true)
     }
     
     
-    
-    private func submitStudentLocation() {
+    private func submitStudentLocation(httpMethod: OTMNetworkController.httpMethod) {
         guard let postObject = self.studentLocation else { return }
         
-        //update existing student location objectID
-        if let objectID = AppDelegate.studentLocation?.studentLocation.objectId {
-         
-            OTMNetworkController.shared.putStudentLocation(with: postObject, objectID: objectID) { (result) in
-                
-                switch result {
-                case .success(let studentLocationUpdate):
-                    
-                    //update student location with updatedAt
-                    AppDelegate.studentLocation?.updatedAt = studentLocationUpdate.updatedAt
-                    print("Successs! Updated Student Location object: \(String(describing: AppDelegate.studentLocation))")
-                    
-                    //perform segue back to StudentLocationsMapVC
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: SegueIdentifier.segueToStudentLocationsMapVC, sender: nil)
-                    }
-                    
-                case .failure(let error):
-                    
-                    //present error alert
-                    self.presentUserAlert(title: "Failed to Update Location!", message: error.rawValue)
-                    return
-                }
-            }
-         
         //post new and create new student location object
-        } else {
+        switch httpMethod {
+        case .post:
             OTMNetworkController.shared.postStudentLocation(with: postObject) { (result) in
                         
                 switch result {
@@ -147,6 +141,36 @@ class SubmitStudentLocationViewController: UIViewController {
                     return
                 }
             }
+        
+        //update existing student location objectID
+        case .put:
+            guard let objectID = objectID else { return }
+            
+            OTMNetworkController.shared.putStudentLocation(with: postObject, objectID: objectID) { (result) in
+                
+                switch result {
+                case .success(let studentLocationUpdate):
+                    
+                    //update student location with updatedAt
+                    AppDelegate.studentLocation?.updatedAt = studentLocationUpdate.updatedAt
+                    print("Successs! Updated Student Location object: \(String(describing: AppDelegate.studentLocation))")
+                    
+                    //perform segue back to StudentLocationsMapVC
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: SegueIdentifier.segueToStudentLocationsMapVC, sender: nil)
+                    }
+                    
+                case .failure(let error):
+                    
+                    //present error alert
+                    self.presentUserAlert(title: "Failed to Update Location!", message: error.rawValue)
+                    return
+                }
+            }
+            
+        default:
+            print("Error! Canno submit student location, unknown case")
+            break
         }
     }
 }
