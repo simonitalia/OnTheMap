@@ -43,7 +43,7 @@ This app uses:
 
 - JSON Encoder / Decoder
 
-- Closues
+- Closures
 
 - Custom Completion handlers (@escaping functions)
 
